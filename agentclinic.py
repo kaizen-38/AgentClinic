@@ -83,11 +83,26 @@ def inference_huggingface(prompt, pipe):
 _OPENAI_API_BASE_OVERRIDE = None
 _LOCAL_MODEL_NAME = None  # actual model name sent to vLLM / Voyager
 
+# ── Dual-endpoint globals ─────────────────────────────────────────────────────
+# Local Gaudi vLLM  → used by doctor + patient when --doctor_llm local
+_LOCAL_API_BASE = None
+_LOCAL_API_KEY  = "EMPTY"
+# Voyager API       → used by measurement + moderator when --*_llm voyager
+_VOYAGER_API_BASE  = "https://openai.rc.asu.edu/v1"
+_VOYAGER_API_KEY   = None
+_VOYAGER_MODEL_NAME = None  # e.g. "qwen3-30b-a3b-instruct-2507"
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def _strip_thinking(text: str) -> str:
+    """Remove <think>…</think> blocks produced by Qwen3 / DeepSeek-R1 style models."""
+    return re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
+
 
 def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
     _known = ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b",
               "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet",
-              "o1-preview", "local"]
+              "o1-preview", "local", "voyager"]
     if model_str not in _known and "HF_" not in model_str:
         raise Exception("No model by the name {}".format(model_str))
     for _ in range(tries):
@@ -236,20 +251,47 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                 answer = ''.join(output)
                 answer = re.sub("\s+", " ", answer)
             elif model_str == "local":
-                # Route through any OpenAI-compatible endpoint (vLLM on Gaudi / Voyager).
-                # openai.api_base is already set by main(); _LOCAL_MODEL_NAME is the
-                # exact model string the server was launched with.
+                # Route to local Gaudi vLLM endpoint.
                 _model_name = _LOCAL_MODEL_NAME or "local-model"
                 messages = [
                     {"role": "system", "content": system_prompt},
                     {"role": "user",   "content": prompt}]
-                response = openai.ChatCompletion.create(
-                        model=_model_name,
-                        messages=messages,
-                        temperature=0.05,
-                        max_tokens=200,
-                    )
-                answer = response["choices"][0]["message"]["content"]
+                _saved_base, _saved_key = openai.api_base, openai.api_key
+                try:
+                    if _LOCAL_API_BASE:
+                        openai.api_base = _LOCAL_API_BASE
+                    openai.api_key = _LOCAL_API_KEY
+                    response = openai.ChatCompletion.create(
+                            model=_model_name,
+                            messages=messages,
+                            temperature=0.05,
+                            max_tokens=200,
+                        )
+                finally:
+                    openai.api_base = _saved_base
+                    openai.api_key = _saved_key
+                answer = _strip_thinking(response["choices"][0]["message"]["content"])
+                answer = re.sub("\\s+", " ", answer)
+            elif model_str == "voyager":
+                # Route to Voyager API endpoint (ASU RC OpenAI-compatible).
+                _model_name = _VOYAGER_MODEL_NAME or "unknown-voyager-model"
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user",   "content": prompt}]
+                _saved_base, _saved_key = openai.api_base, openai.api_key
+                try:
+                    openai.api_base = _VOYAGER_API_BASE
+                    openai.api_key = _VOYAGER_API_KEY
+                    response = openai.ChatCompletion.create(
+                            model=_model_name,
+                            messages=messages,
+                            temperature=0.05,
+                            max_tokens=200,
+                        )
+                finally:
+                    openai.api_base = _saved_base
+                    openai.api_key = _saved_key
+                answer = _strip_thinking(response["choices"][0]["message"]["content"])
                 answer = re.sub("\\s+", " ", answer)
             elif "HF_" in model_str:
                 input_text = system_prompt + prompt
@@ -648,31 +690,37 @@ class MeasurementAgent:
 
 def compare_results(diagnosis, correct_diagnosis, moderator_llm, mod_pipe):
     answer = query_model(moderator_llm, "\nHere is the correct diagnosis: " + correct_diagnosis + "\n Here was the doctor dialogue: " + diagnosis + "\nAre these the same?", "You are responsible for determining if the corrent diagnosis and the doctor diagnosis are the same disease. Please respond only with Yes or No. Nothing else.")
-    return answer.lower()
+    # Normalize: take first word, strip punctuation — handles "Yes.", "Yes!", "Yes, ..." etc.
+    first_word = re.sub(r'[^a-z]', '', answer.lower().split()[0]) if answer.strip() else "no"
+    return first_word
 
 
 def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor_llm, patient_llm,
          measurement_llm, moderator_llm, num_scenarios, dataset, img_request, total_inferences,
          anthropic_api_key=None, output_dir="./trajectories",
-         openai_api_base=None, local_model_name=None, voyager_api_key=None, voyager_api_base=None):
-    global _OPENAI_API_BASE_OVERRIDE, _LOCAL_MODEL_NAME
+         openai_api_base=None, local_model_name=None, voyager_api_key=None, voyager_api_base=None,
+         voyager_model_name=None):
+    global _OPENAI_API_BASE_OVERRIDE, _LOCAL_MODEL_NAME, \
+           _LOCAL_API_BASE, _LOCAL_API_KEY, \
+           _VOYAGER_API_BASE, _VOYAGER_API_KEY, _VOYAGER_MODEL_NAME
 
-    # ── OpenAI / Voyager API configuration ────────────────────────────────────
-    # If a Voyager key is provided, use it; otherwise fall back to the standard key.
-    effective_api_key = voyager_api_key if voyager_api_key else api_key
-
-    # If an api_base is explicitly provided (local vLLM or Voyager) use it;
-    # otherwise default to the official OpenAI endpoint.
+    # ── Local vLLM endpoint (doctor + patient when --*_llm local) ─────────────
     if openai_api_base:
-        openai.api_base = openai_api_base
+        _LOCAL_API_BASE = openai_api_base
         _OPENAI_API_BASE_OVERRIDE = openai_api_base
-    elif voyager_api_base:
-        openai.api_base = voyager_api_base
-        _OPENAI_API_BASE_OVERRIDE = voyager_api_base
-
-    openai.api_key = effective_api_key
     if local_model_name:
         _LOCAL_MODEL_NAME = local_model_name
+
+    # ── Voyager endpoint (measurement + moderator when --*_llm voyager) ────────
+    if voyager_api_key:
+        _VOYAGER_API_KEY = voyager_api_key
+    if voyager_api_base:
+        _VOYAGER_API_BASE = voyager_api_base
+    if voyager_model_name:
+        _VOYAGER_MODEL_NAME = voyager_model_name
+
+    # ── Default OpenAI config (for gpt4/gpt4o/etc. if directly selected) ──────
+    openai.api_key = api_key or "EMPTY"
     # ──────────────────────────────────────────────────────────────────────────
 
     anthropic_llms = ["claude3.5sonnet"]
@@ -838,6 +886,7 @@ if __name__ == "__main__":
     parser.add_argument('--local_model_name',    type=str, default=None, required=False, help='Model name to pass to local vLLM server when using --doctor_llm local / --patient_llm local')
     parser.add_argument('--voyager_api_key',     type=str, default=None, required=False, help='Voyager API key (ASU RC OpenAI-compatible endpoint)')
     parser.add_argument('--voyager_api_base',    type=str, default='https://openai.rc.asu.edu/v1', required=False, help='Voyager API base URL')
+    parser.add_argument('--voyager_model_name',  type=str, default=None, required=False, help='Model name on Voyager for measurement + moderator agents (e.g. qwen3-30b-a3b-instruct-2507)')
     # ──────────────────────────────────────────────────────────────────────────
 
     args = parser.parse_args()
@@ -846,4 +895,5 @@ if __name__ == "__main__":
          args.doctor_llm, args.patient_llm, args.measurement_llm, args.moderator_llm,
          args.num_scenarios, args.agent_dataset, args.doctor_image_request, args.total_inferences,
          args.anthropic_api_key, args.output_dir,
-         args.openai_api_base, args.local_model_name, args.voyager_api_key, args.voyager_api_base)
+         args.openai_api_base, args.local_model_name, args.voyager_api_key, args.voyager_api_base,
+         args.voyager_model_name)
