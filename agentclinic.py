@@ -2,6 +2,67 @@ import argparse
 import anthropic
 from transformers import pipeline
 import openai, re, random, time, json, replicate, os
+import datetime
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Trajectory helpers
+# ---------------------------------------------------------------------------
+
+def make_trajectory(scenario_id, dataset, doctor_llm, patient_llm,
+                    measurement_llm, moderator_llm, doctor_bias,
+                    patient_bias, correct_diagnosis):
+    """Create an empty trajectory record for one scenario."""
+    return {
+        "scenario_id": scenario_id,
+        "dataset": dataset,
+        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "models": {
+            "doctor": doctor_llm,
+            "patient": patient_llm,
+            "measurement": measurement_llm,
+            "moderator": moderator_llm,
+        },
+        "biases": {
+            "doctor": doctor_bias,
+            "patient": patient_bias,
+        },
+        "correct_diagnosis": correct_diagnosis,
+        "turns": [],                  # list of {turn_id, role, content, turn_type}
+        "final_diagnosis": None,      # what the doctor ultimately said
+        "is_correct": None,           # True / False / None (gave up)
+        "total_turns": 0,
+        "diagnosis_ready_issued": False,
+        "tests_requested": [],        # names of tests requested
+    }
+
+
+def add_turn(trajectory, role, content, turn_type="dialogue"):
+    """Append one labelled turn to the trajectory dict.
+
+    Args:
+        trajectory: dict created by make_trajectory()
+        role:       'doctor' | 'patient' | 'measurement' | 'system'
+        content:    raw text of the turn
+        turn_type:  'dialogue' | 'test_request' | 'test_result' | 'diagnosis'
+    """
+    trajectory["turns"].append({
+        "turn_id": len(trajectory["turns"]),
+        "role": role,
+        "content": content,
+        "turn_type": turn_type,
+    })
+    trajectory["total_turns"] = len(trajectory["turns"])
+
+
+def save_trajectory(trajectory, output_dir):
+    """Write trajectory to output_dir/trajectory_{scenario_id:04d}.json."""
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    out_path = Path(output_dir) / "trajectory_{:04d}.json".format(trajectory["scenario_id"])
+    with open(out_path, "w") as f:
+        json.dump(trajectory, f, indent=2)
+    return str(out_path)
+
 
 llama2_url = "meta/llama-2-70b-chat"
 llama3_url = "meta/meta-llama-3-70b-instruct"
@@ -17,8 +78,17 @@ def inference_huggingface(prompt, pipe):
     return response
 
 
+# Global override for custom OpenAI-compatible endpoints (Voyager / local vLLM).
+# Set by main() when --openai_api_base is provided.
+_OPENAI_API_BASE_OVERRIDE = None
+_LOCAL_MODEL_NAME = None  # actual model name sent to vLLM / Voyager
+
+
 def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
-    if model_str not in ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b", "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet", "o1-preview"] and "_HF" not in model_str:
+    _known = ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b",
+              "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet",
+              "o1-preview", "local"]
+    if model_str not in _known and "HF_" not in model_str:
         raise Exception("No model by the name {}".format(model_str))
     for _ in range(tries):
         if clip_prompt: prompt = prompt[:max_prompt_len]
@@ -165,13 +235,27 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         "max_new_tokens": 200})
                 answer = ''.join(output)
                 answer = re.sub("\s+", " ", answer)
+            elif model_str == "local":
+                # Route through any OpenAI-compatible endpoint (vLLM on Gaudi / Voyager).
+                # openai.api_base is already set by main(); _LOCAL_MODEL_NAME is the
+                # exact model string the server was launched with.
+                _model_name = _LOCAL_MODEL_NAME or "local-model"
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user",   "content": prompt}]
+                response = openai.ChatCompletion.create(
+                        model=_model_name,
+                        messages=messages,
+                        temperature=0.05,
+                        max_tokens=200,
+                    )
+                answer = response["choices"][0]["message"]["content"]
+                answer = re.sub("\\s+", " ", answer)
             elif "HF_" in model_str:
-                input_text = system_prompt + prompt 
-                #if self.pipe is None:
-                #    self.pipe = load_huggingface_model(self.backend.replace("HF_", ""))
-                raise Exception("Sorry, fixing TODO :3") #inference_huggingface(input_text, self.pipe)
+                input_text = system_prompt + prompt
+                raise Exception("HuggingFace local inference not yet implemented. Use 'local' + --openai_api_base with vLLM instead.")
             return answer
-        
+
         except Exception as e:
             time.sleep(timeout)
             continue
@@ -567,8 +651,30 @@ def compare_results(diagnosis, correct_diagnosis, moderator_llm, mod_pipe):
     return answer.lower()
 
 
-def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor_llm, patient_llm, measurement_llm, moderator_llm, num_scenarios, dataset, img_request, total_inferences, anthropic_api_key=None):
-    openai.api_key = api_key
+def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor_llm, patient_llm,
+         measurement_llm, moderator_llm, num_scenarios, dataset, img_request, total_inferences,
+         anthropic_api_key=None, output_dir="./trajectories",
+         openai_api_base=None, local_model_name=None, voyager_api_key=None, voyager_api_base=None):
+    global _OPENAI_API_BASE_OVERRIDE, _LOCAL_MODEL_NAME
+
+    # ── OpenAI / Voyager API configuration ────────────────────────────────────
+    # If a Voyager key is provided, use it; otherwise fall back to the standard key.
+    effective_api_key = voyager_api_key if voyager_api_key else api_key
+
+    # If an api_base is explicitly provided (local vLLM or Voyager) use it;
+    # otherwise default to the official OpenAI endpoint.
+    if openai_api_base:
+        openai.api_base = openai_api_base
+        _OPENAI_API_BASE_OVERRIDE = openai_api_base
+    elif voyager_api_base:
+        openai.api_base = voyager_api_base
+        _OPENAI_API_BASE_OVERRIDE = voyager_api_base
+
+    openai.api_key = effective_api_key
+    if local_model_name:
+        _LOCAL_MODEL_NAME = local_model_name
+    # ──────────────────────────────────────────────────────────────────────────
+
     anthropic_llms = ["claude3.5sonnet"]
     replicate_llms = ["llama-3-70b-instruct", "llama-2-70b-chat", "mixtral-8x7b"]
     if patient_llm in replicate_llms or doctor_llm in replicate_llms:
@@ -602,7 +708,22 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
         total_presents += 1
         pi_dialogue = str()
         # Initialize scenarios (MedQA/NEJM)
-        scenario =  scenario_loader.get_scenario(id=_scenario_id)
+        scenario = scenario_loader.get_scenario(id=_scenario_id)
+
+        # ── Trajectory setup ──────────────────────────────────────────────────
+        traj = make_trajectory(
+            scenario_id=_scenario_id,
+            dataset=dataset,
+            doctor_llm=doctor_llm,
+            patient_llm=patient_llm,
+            measurement_llm=measurement_llm,
+            moderator_llm=moderator_llm,
+            doctor_bias=doctor_bias,
+            patient_bias=patient_bias,
+            correct_diagnosis=str(scenario.diagnosis_information()),
+        )
+        # ─────────────────────────────────────────────────────────────────────
+
         # Initialize agents
         meas_agent = MeasurementAgent(
             scenario=scenario,
@@ -635,18 +756,43 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
             else: 
                 doctor_dialogue = doctor_agent.inference_doctor(pi_dialogue, image_requested=imgs)
             print("Doctor [{}%]:".format(int(((_inf_id+1)/total_inferences)*100)), doctor_dialogue)
+
+            # ── Record doctor turn ────────────────────────────────────────────
+            if "DIAGNOSIS READY" in doctor_dialogue:
+                turn_type = "diagnosis"
+            elif "REQUEST TEST" in doctor_dialogue:
+                turn_type = "test_request"
+                # Extract test name for summary
+                try:
+                    test_name = doctor_dialogue.split("REQUEST TEST:")[1].split("\n")[0].strip()
+                    traj["tests_requested"].append(test_name)
+                except Exception:
+                    pass
+            else:
+                turn_type = "dialogue"
+            add_turn(traj, role="doctor", content=doctor_dialogue, turn_type=turn_type)
+            # ─────────────────────────────────────────────────────────────────
+
             # Doctor has arrived at a diagnosis, check correctness
             if "DIAGNOSIS READY" in doctor_dialogue:
                 correctness = compare_results(doctor_dialogue, scenario.diagnosis_information(), moderator_llm, pipe) == "yes"
                 if correctness: total_correct += 1
                 print("\nCorrect answer:", scenario.diagnosis_information())
                 print("Scene {}, The diagnosis was ".format(_scenario_id), "CORRECT" if correctness else "INCORRECT", int((total_correct/total_presents)*100))
+                # ── Finalize trajectory ───────────────────────────────────────
+                traj["diagnosis_ready_issued"] = True
+                traj["final_diagnosis"] = doctor_dialogue
+                traj["is_correct"] = bool(correctness)
+                # ─────────────────────────────────────────────────────────────
                 break
             # Obtain medical exam from measurement reader
             if "REQUEST TEST" in doctor_dialogue:
                 pi_dialogue = meas_agent.inference_measurement(doctor_dialogue,)
                 print("Measurement [{}%]:".format(int(((_inf_id+1)/total_inferences)*100)), pi_dialogue)
                 patient_agent.add_hist(pi_dialogue)
+                # ── Record measurement turn ───────────────────────────────────
+                add_turn(traj, role="measurement", content=pi_dialogue, turn_type="test_result")
+                # ─────────────────────────────────────────────────────────────
             # Obtain response from patient
             else:
                 if inf_type == "human_patient":
@@ -655,8 +801,19 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
                     pi_dialogue = patient_agent.inference_patient(doctor_dialogue)
                 print("Patient [{}%]:".format(int(((_inf_id+1)/total_inferences)*100)), pi_dialogue)
                 meas_agent.add_hist(pi_dialogue)
+                # ── Record patient turn ───────────────────────────────────────
+                add_turn(traj, role="patient", content=pi_dialogue, turn_type="dialogue")
+                # ─────────────────────────────────────────────────────────────
             # Prevent API timeouts
             time.sleep(1.0)
+
+        # ── Save trajectory for this scenario ─────────────────────────────────
+        if traj["is_correct"] is None:  # Doctor never issued DIAGNOSIS READY
+            traj["final_diagnosis"] = "(Doctor did not issue DIAGNOSIS READY)"
+            traj["is_correct"] = False
+        saved_path = save_trajectory(traj, output_dir)
+        print(f"[Trajectory saved → {saved_path}]")
+        # ─────────────────────────────────────────────────────────────────────
 
 
 if __name__ == "__main__":
@@ -674,8 +831,19 @@ if __name__ == "__main__":
     parser.add_argument('--doctor_image_request', type=bool, default=False) # whether images must be requested or are provided
     parser.add_argument('--num_scenarios', type=int, default=None, required=False, help='Number of scenarios to simulate')
     parser.add_argument('--total_inferences', type=int, default=20, required=False, help='Number of inferences between patient and doctor')
-    parser.add_argument('--anthropic_api_key', type=str, default=None, required=False, help='Anthropic API key for Claude 3.5 Sonnet')
-    
+    parser.add_argument('--anthropic_api_key',  type=str, default=None, required=False, help='Anthropic API key for Claude 3.5 Sonnet')
+    parser.add_argument('--output_dir',          type=str, default='./trajectories', required=False, help='Directory to save per-scenario JSON trajectory files')
+    # ── Custom API endpoint arguments (Voyager / local vLLM on Gaudi) ─────────
+    parser.add_argument('--openai_api_base',     type=str, default=None, required=False, help='Override OpenAI API base URL (e.g. http://127.0.0.1:8000/v1 for local vLLM)')
+    parser.add_argument('--local_model_name',    type=str, default=None, required=False, help='Model name to pass to local vLLM server when using --doctor_llm local / --patient_llm local')
+    parser.add_argument('--voyager_api_key',     type=str, default=None, required=False, help='Voyager API key (ASU RC OpenAI-compatible endpoint)')
+    parser.add_argument('--voyager_api_base',    type=str, default='https://openai.rc.asu.edu/v1', required=False, help='Voyager API base URL')
+    # ──────────────────────────────────────────────────────────────────────────
+
     args = parser.parse_args()
 
-    main(args.openai_api_key, args.replicate_api_key, args.inf_type, args.doctor_bias, args.patient_bias, args.doctor_llm, args.patient_llm, args.measurement_llm, args.moderator_llm, args.num_scenarios, args.agent_dataset, args.doctor_image_request, args.total_inferences, args.anthropic_api_key)
+    main(args.openai_api_key, args.replicate_api_key, args.inf_type, args.doctor_bias, args.patient_bias,
+         args.doctor_llm, args.patient_llm, args.measurement_llm, args.moderator_llm,
+         args.num_scenarios, args.agent_dataset, args.doctor_image_request, args.total_inferences,
+         args.anthropic_api_key, args.output_dir,
+         args.openai_api_base, args.local_model_name, args.voyager_api_key, args.voyager_api_base)

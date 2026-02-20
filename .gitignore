@@ -3,3 +3,32 @@ results/*
 *_results*.py
 *.out
 
+# Virtual environment
+venv/
+.venv/
+
+# API keys and secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+~/.agentclinic_secrets
+
+# Generated trajectory files
+trajectories/
+trajectories_*/
+
+# Habana / HuggingFace caches
+habana_logs/
+.cache/
+
+# Python artifacts
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
