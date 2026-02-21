@@ -100,13 +100,13 @@ def _strip_thinking(text: str) -> str:
     return re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL).strip()
 
 
-def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
+def query_model(model_str, prompt, system_prompt, tries=5, timeout=5.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
     _known = ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b",
               "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet",
               "o1-preview", "local", "voyager", "voyager_lite"]
     if model_str not in _known and "HF_" not in model_str:
         raise Exception("No model by the name {}".format(model_str))
-    for _ in range(tries):
+    for _attempt in range(tries):
         if clip_prompt: prompt = prompt[:max_prompt_len]
         try:
             if image_requested:
@@ -293,6 +293,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                             messages=messages,
                             temperature=0.05,
                             max_tokens=200,
+                            request_timeout=180,  # 3 min — 235B model can be slow
                         )
                 finally:
                     openai.api_base = _saved_base
@@ -305,9 +306,10 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
             return answer
 
         except Exception as e:
+            print(f"[query_model:{model_str}] attempt {_attempt+1}/{tries} failed — {type(e).__name__}: {e}", flush=True)
             time.sleep(timeout)
             continue
-    raise Exception("Max retries: timeout")
+    raise Exception(f"Max retries exhausted for model '{model_str}' after {tries} attempts")
 
 
 
