@@ -161,7 +161,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         max_tokens=200,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "gpt4v":
                 messages = [
                     {"role": "system", "content": system_prompt},
@@ -173,7 +173,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         max_tokens=200,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "gpt-4o-mini":
                 messages = [
                     {"role": "system", "content": system_prompt},
@@ -185,7 +185,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         max_tokens=200,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "o1-preview":
                 messages = [
                     {"role": "user", "content": system_prompt + prompt}]
@@ -194,7 +194,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         messages=messages,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "gpt3.5":
                 messages = [
                     {"role": "system", "content": system_prompt},
@@ -206,7 +206,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         max_tokens=200,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "claude3.5sonnet":
                 client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
                 message = client.messages.create(
@@ -226,7 +226,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         max_tokens=200,
                     )
                 answer = response["choices"][0]["message"]["content"]
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == 'llama-2-70b-chat':
                 output = replicate.run(
                     llama2_url, input={
@@ -234,7 +234,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         "system_prompt": system_prompt,
                         "max_new_tokens": 200})
                 answer = ''.join(output)
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == 'mixtral-8x7b':
                 output = replicate.run(
                     mixtral_url, 
@@ -242,7 +242,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                             "system_prompt": system_prompt,
                             "max_new_tokens": 75})
                 answer = ''.join(output)
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == 'llama-3-70b-instruct':
                 output = replicate.run(
                     llama3_url, input={
@@ -250,7 +250,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                         "system_prompt": system_prompt,
                         "max_new_tokens": 200})
                 answer = ''.join(output)
-                answer = re.sub("\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str == "local":
                 # Route to local Gaudi vLLM endpoint.
                 _model_name = _LOCAL_MODEL_NAME or "local-model"
@@ -272,7 +272,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                     openai.api_base = _saved_base
                     openai.api_key = _saved_key
                 answer = _strip_thinking(response["choices"][0]["message"]["content"])
-                answer = re.sub("\\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif model_str in ("voyager", "voyager_lite"):
                 # Route to Voyager API endpoint (ASU RC OpenAI-compatible).
                 # "voyager"      → strong model (_VOYAGER_MODEL_NAME)      e.g. doctor, moderator
@@ -298,7 +298,7 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                     openai.api_base = _saved_base
                     openai.api_key = _saved_key
                 answer = _strip_thinking(response["choices"][0]["message"]["content"])
-                answer = re.sub("\\s+", " ", answer)
+                answer = re.sub(r"\s+", " ", answer)
             elif "HF_" in model_str:
                 input_text = system_prompt + prompt
                 raise Exception("HuggingFace local inference not yet implemented. Use 'local' + --openai_api_base with vLLM instead.")

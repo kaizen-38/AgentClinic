@@ -6,7 +6,7 @@
 #SBATCH --mem=120G
 #SBATCH --time=24:00:00
 #SBATCH -A class_cse59827694spring2026
-#SBATCH --job-name=agentclinic-llama70b
+#SBATCH --job-name=agentclinic-qwen72b
 #SBATCH --output=/scratch/%u/agentclinic/logs/%x-%j.out
 #SBATCH --error=/scratch/%u/agentclinic/logs/%x-%j.err
 
@@ -145,7 +145,7 @@ LOCAL_API_BASE="http://127.0.0.1:${PORT}/v1"
 cd "$AC_DIR"
 
 echo "============================================"
-echo "  AGENTCLINIC — LLAMA/QWEN 70B RUN"
+echo "  AGENTCLINIC — QWEN 2.5-72B RUN (4x Gaudi)"
 echo "============================================"
 echo "  Job ID        : $SLURM_JOB_ID"
 echo "  Node          : $(hostname)"
