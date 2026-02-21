@@ -87,10 +87,11 @@ _LOCAL_MODEL_NAME = None  # actual model name sent to vLLM / Voyager
 # Local Gaudi vLLM  → used by doctor + patient when --doctor_llm local
 _LOCAL_API_BASE = None
 _LOCAL_API_KEY  = "EMPTY"
-# Voyager API       → used by measurement + moderator when --*_llm voyager
-_VOYAGER_API_BASE  = "https://openai.rc.asu.edu/v1"
-_VOYAGER_API_KEY   = None
-_VOYAGER_MODEL_NAME = None  # e.g. "qwen3-30b-a3b-instruct-2507"
+# Voyager API       → used by agents when --*_llm voyager / voyager_lite
+_VOYAGER_API_BASE       = "https://openai.rc.asu.edu/v1"
+_VOYAGER_API_KEY        = None
+_VOYAGER_MODEL_NAME     = None  # strong model  e.g. "qwen3-235b-a22b-instruct-2507"
+_VOYAGER_LITE_MODEL_NAME = None # fast model    e.g. "qwen3-30b-a3b-instruct-2507"
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -102,7 +103,7 @@ def _strip_thinking(text: str) -> str:
 def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
     _known = ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b",
               "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet",
-              "o1-preview", "local", "voyager"]
+              "o1-preview", "local", "voyager", "voyager_lite"]
     if model_str not in _known and "HF_" not in model_str:
         raise Exception("No model by the name {}".format(model_str))
     for _ in range(tries):
@@ -272,9 +273,14 @@ def query_model(model_str, prompt, system_prompt, tries=30, timeout=20.0, image_
                     openai.api_key = _saved_key
                 answer = _strip_thinking(response["choices"][0]["message"]["content"])
                 answer = re.sub("\\s+", " ", answer)
-            elif model_str == "voyager":
+            elif model_str in ("voyager", "voyager_lite"):
                 # Route to Voyager API endpoint (ASU RC OpenAI-compatible).
-                _model_name = _VOYAGER_MODEL_NAME or "unknown-voyager-model"
+                # "voyager"      → strong model (_VOYAGER_MODEL_NAME)      e.g. doctor, moderator
+                # "voyager_lite" → fast model   (_VOYAGER_LITE_MODEL_NAME) e.g. patient, measurement
+                if model_str == "voyager_lite" and _VOYAGER_LITE_MODEL_NAME:
+                    _model_name = _VOYAGER_LITE_MODEL_NAME
+                else:
+                    _model_name = _VOYAGER_MODEL_NAME or "unknown-voyager-model"
                 messages = [
                     {"role": "system", "content": system_prompt},
                     {"role": "user",   "content": prompt}]
@@ -699,10 +705,10 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
          measurement_llm, moderator_llm, num_scenarios, dataset, img_request, total_inferences,
          anthropic_api_key=None, output_dir="./trajectories",
          openai_api_base=None, local_model_name=None, voyager_api_key=None, voyager_api_base=None,
-         voyager_model_name=None):
+         voyager_model_name=None, voyager_lite_model_name=None):
     global _OPENAI_API_BASE_OVERRIDE, _LOCAL_MODEL_NAME, \
            _LOCAL_API_BASE, _LOCAL_API_KEY, \
-           _VOYAGER_API_BASE, _VOYAGER_API_KEY, _VOYAGER_MODEL_NAME
+           _VOYAGER_API_BASE, _VOYAGER_API_KEY, _VOYAGER_MODEL_NAME, _VOYAGER_LITE_MODEL_NAME
 
     # ── Local vLLM endpoint (doctor + patient when --*_llm local) ─────────────
     if openai_api_base:
@@ -718,6 +724,8 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
         _VOYAGER_API_BASE = voyager_api_base
     if voyager_model_name:
         _VOYAGER_MODEL_NAME = voyager_model_name
+    if voyager_lite_model_name:
+        _VOYAGER_LITE_MODEL_NAME = voyager_lite_model_name
 
     # ── Default OpenAI config (for gpt4/gpt4o/etc. if directly selected) ──────
     openai.api_key = api_key or "EMPTY"
@@ -755,6 +763,7 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
     for _scenario_id in range(0, min(num_scenarios, scenario_loader.num_scenarios)):
         total_presents += 1
         pi_dialogue = str()
+        _scenario_start = time.time()
         # Initialize scenarios (MedQA/NEJM)
         scenario = scenario_loader.get_scenario(id=_scenario_id)
 
@@ -859,8 +868,10 @@ def main(api_key, replicate_api_key, inf_type, doctor_bias, patient_bias, doctor
         if traj["is_correct"] is None:  # Doctor never issued DIAGNOSIS READY
             traj["final_diagnosis"] = "(Doctor did not issue DIAGNOSIS READY)"
             traj["is_correct"] = False
+        _scenario_elapsed = time.time() - _scenario_start
+        traj["scenario_duration_seconds"] = round(_scenario_elapsed, 1)
         saved_path = save_trajectory(traj, output_dir)
-        print(f"[Trajectory saved → {saved_path}]")
+        print(f"[Trajectory saved → {saved_path}]  [{_scenario_elapsed:.1f}s for scenario {_scenario_id}]  [Running acc: {int((total_correct/total_presents)*100)}%]")
         # ─────────────────────────────────────────────────────────────────────
 
 
@@ -869,8 +880,8 @@ if __name__ == "__main__":
     parser.add_argument('--openai_api_key', type=str, required=False, help='OpenAI API Key')
     parser.add_argument('--replicate_api_key', type=str, required=False, help='Replicate API Key')
     parser.add_argument('--inf_type', type=str, choices=['llm', 'human_doctor', 'human_patient'], default='llm')
-    parser.add_argument('--doctor_bias', type=str, help='Doctor bias type', default='None', choices=["recency", "frequency", "false_consensus", "confirmation", "status_quo", "gender", "race", "sexual_orientation", "cultural", "education", "religion", "socioeconomic"])
-    parser.add_argument('--patient_bias', type=str, help='Patient bias type', default='None', choices=["recency", "frequency", "false_consensus", "self_diagnosis", "gender", "race", "sexual_orientation", "cultural", "education", "religion", "socioeconomic"])
+    parser.add_argument('--doctor_bias', type=str, help='Doctor bias type', default='None', choices=["None", "recency", "frequency", "false_consensus", "confirmation", "status_quo", "gender", "race", "sexual_orientation", "cultural", "education", "religion", "socioeconomic"])
+    parser.add_argument('--patient_bias', type=str, help='Patient bias type', default='None', choices=["None", "recency", "frequency", "false_consensus", "self_diagnosis", "gender", "race", "sexual_orientation", "cultural", "education", "religion", "socioeconomic"])
     parser.add_argument('--doctor_llm', type=str, default='gpt4')
     parser.add_argument('--patient_llm', type=str, default='gpt4')
     parser.add_argument('--measurement_llm', type=str, default='gpt4')
@@ -886,7 +897,8 @@ if __name__ == "__main__":
     parser.add_argument('--local_model_name',    type=str, default=None, required=False, help='Model name to pass to local vLLM server when using --doctor_llm local / --patient_llm local')
     parser.add_argument('--voyager_api_key',     type=str, default=None, required=False, help='Voyager API key (ASU RC OpenAI-compatible endpoint)')
     parser.add_argument('--voyager_api_base',    type=str, default='https://openai.rc.asu.edu/v1', required=False, help='Voyager API base URL')
-    parser.add_argument('--voyager_model_name',  type=str, default=None, required=False, help='Model name on Voyager for measurement + moderator agents (e.g. qwen3-30b-a3b-instruct-2507)')
+    parser.add_argument('--voyager_model_name',       type=str, default=None, required=False, help='Strong Voyager model for doctor + moderator (e.g. qwen3-235b-a22b-instruct-2507)')
+    parser.add_argument('--voyager_lite_model_name',  type=str, default=None, required=False, help='Fast Voyager model for patient + measurement (e.g. qwen3-30b-a3b-instruct-2507)')
     # ──────────────────────────────────────────────────────────────────────────
 
     args = parser.parse_args()
@@ -896,4 +908,4 @@ if __name__ == "__main__":
          args.num_scenarios, args.agent_dataset, args.doctor_image_request, args.total_inferences,
          args.anthropic_api_key, args.output_dir,
          args.openai_api_base, args.local_model_name, args.voyager_api_key, args.voyager_api_base,
-         args.voyager_model_name)
+         args.voyager_model_name, args.voyager_lite_model_name)
