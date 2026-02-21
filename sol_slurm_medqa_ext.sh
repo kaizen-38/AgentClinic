@@ -44,7 +44,7 @@ DATASET="MedQA_Ext"
 TOTAL_INFERENCES=20
 DOCTOR_BIAS="None"
 PATIENT_BIAS="None"
-OUTPUT_DIR="$AC_DIR/trajectories"
+OUTPUT_DIR="$AC_DIR/trajectories/voyager/medqa_ext"
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Use second API key to avoid rate-limit collisions with MedQA job ─────────

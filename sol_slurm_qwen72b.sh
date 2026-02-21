@@ -66,7 +66,7 @@ DATASET="MedQA"
 TOTAL_INFERENCES=20
 DOCTOR_BIAS="None"
 PATIENT_BIAS="None"
-OUTPUT_DIR="$AC_DIR/trajectories"
+OUTPUT_DIR="$AC_DIR/trajectories/qwen72b/medqa"
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Load Voyager API keys ─────────────────────────────────────────────────────
@@ -83,13 +83,14 @@ if [[ -z "${VOYAGER_API_KEY:-}" ]]; then
 fi
 # ─────────────────────────────────────────────────────────────────────────────
 
-# ── Python venv setup ─────────────────────────────────────────────────────────
+# ── Python venv (pre-built manually — see README setup steps) ────────────────
 VENV_PY="$AC_DIR/venv/bin/python"
-[ ! -f "$VENV_PY" ] && python3 -m venv "$AC_DIR/venv"
-# Always install/sync requirements so missing packages are caught every run
-"$AC_DIR/venv/bin/pip" install --quiet --upgrade pip
-"$AC_DIR/venv/bin/pip" install --quiet --no-cache-dir -r "$AC_DIR/requirements.txt"
-echo "Python env ready: $($VENV_PY --version)"
+if [ ! -f "$VENV_PY" ]; then
+  echo "ERROR: venv not found at $AC_DIR/venv" >&2
+  echo "  Run setup first: python3 -m venv venv && venv/bin/pip install -r requirements.txt" >&2
+  exit 1
+fi
+echo "Using venv: $($VENV_PY --version) at $VENV_PY"
 # ─────────────────────────────────────────────────────────────────────────────
 
 # ── Launch Gaudi vLLM (4-GPU tensor parallel for 72B model) ──────────────────
