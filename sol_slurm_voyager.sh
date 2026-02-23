@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:hl225:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH -A class_cse59827694spring2026
 #SBATCH --job-name=agentclinic-voyager
 #SBATCH --output=/scratch/%u/agentclinic/logs/%x-%j.out
