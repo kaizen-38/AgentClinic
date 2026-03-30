@@ -15,12 +15,7 @@
 # Llama-4-Scout is a multimodal MoE model served on ASU Voyager.
 # No local GPU needed — all inference is via the Voyager OpenAI-compatible API.
 #
-# Model in VOYAGER_DOCTOR_MODEL must match the exact name in Voyager's model
-# list. Verify with:
-#   curl -s https://openai.rc.asu.edu/v1/models -H "Authorization: Bearer $KEY" \
-#     | python3 -m json.tool | grep llama
-#
-#   Doctor    → voyager  meta-llama/Llama-4-Scout-17B-16E-Instruct  (vision-enabled)
+#   Doctor    → voyager  llama4-scout-17b  (vision-enabled)
 #   Patient   → voyager_lite  qwen3-30b-a3b-instruct-2507
 #   Measurement→voyager_lite  qwen3-30b-a3b-instruct-2507
 #   Moderator → voyager       qwen3-235b-a22b-instruct-2507
@@ -41,7 +36,7 @@ VOYAGER_API_BASE="https://openai.rc.asu.edu/v1"
 # Doctor: Llama-4-Scout on Voyager (multimodal, vision-enabled)
 # If the model name below doesn't match, run the curl command in the header
 # to find the correct name and update VOYAGER_DOCTOR_MODEL.
-VOYAGER_DOCTOR_MODEL="meta-llama/Llama-4-Scout-17B-16E-Instruct"
+VOYAGER_DOCTOR_MODEL="llama4-scout-17b"
 
 # Supporting agents: Qwen3 on Voyager (text-only, fast)
 VOYAGER_LITE_MODEL_NAME="qwen3-30b-a3b-instruct-2507"
