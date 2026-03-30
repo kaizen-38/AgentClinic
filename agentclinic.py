@@ -102,8 +102,8 @@ def _strip_thinking(text: str) -> str:
 
 def query_model(model_str, prompt, system_prompt, tries=5, timeout=5.0, image_requested=False, scene=None, max_prompt_len=2**14, clip_prompt=False):
     _known = ["gpt4", "gpt3.5", "gpt4o", 'llama-2-70b-chat', "mixtral-8x7b",
-              "gpt-4o-mini", "llama-3-70b-instruct", "gpt4v", "claude3.5sonnet",
-              "o1-preview", "local", "voyager", "voyager_lite"]
+              "gpt-4o-mini", "gpt-4.1-mini", "llama-3-70b-instruct", "gpt4v",
+              "claude3.5sonnet", "o1-preview", "local", "voyager", "voyager_lite"]
     if model_str not in _known and "HF_" not in model_str:
         raise Exception("No model by the name {}".format(model_str))
     for _attempt in range(tries):
@@ -149,7 +149,43 @@ def query_model(model_str, prompt, system_prompt, tries=5, timeout=5.0, image_re
                             temperature=0.05,
                             max_tokens=200,
                         )
-                answer = response["choices"][0]["message"]["content"]
+                elif model_str == "local":
+                    # Route multimodal request to local vLLM VLM endpoint.
+                    _model_name = _LOCAL_MODEL_NAME or "local-model"
+                    _saved_base, _saved_key = openai.api_base, openai.api_key
+                    try:
+                        if _LOCAL_API_BASE:
+                            openai.api_base = _LOCAL_API_BASE
+                        openai.api_key = _LOCAL_API_KEY
+                        response = openai.ChatCompletion.create(
+                                model=_model_name,
+                                messages=messages,
+                                temperature=0.05,
+                                max_tokens=200,
+                            )
+                    finally:
+                        openai.api_base = _saved_base
+                        openai.api_key = _saved_key
+                elif model_str in ("voyager", "voyager_lite"):
+                    # Route multimodal request to Voyager API (e.g. Llama-4-Scout).
+                    _voy_model = (_VOYAGER_MODEL_NAME if model_str == "voyager"
+                                  else _VOYAGER_LITE_MODEL_NAME)
+                    _saved_base, _saved_key = openai.api_base, openai.api_key
+                    try:
+                        openai.api_base = _VOYAGER_API_BASE
+                        openai.api_key = _VOYAGER_API_KEY
+                        response = openai.ChatCompletion.create(
+                                model=_voy_model,
+                                messages=messages,
+                                temperature=0.05,
+                                max_tokens=200,
+                            )
+                    finally:
+                        openai.api_base = _saved_base
+                        openai.api_key = _saved_key
+                else:
+                    raise Exception(f"Model '{model_str}' does not support image_requested=True.")
+                answer = _strip_thinking(response["choices"][0]["message"]["content"])
             if model_str == "gpt4":
                 messages = [
                     {"role": "system", "content": system_prompt},
@@ -180,6 +216,18 @@ def query_model(model_str, prompt, system_prompt, tries=5, timeout=5.0, image_re
                     {"role": "user", "content": prompt}]
                 response = openai.ChatCompletion.create(
                         model="gpt-4o-mini",
+                        messages=messages,
+                        temperature=0.05,
+                        max_tokens=200,
+                    )
+                answer = response["choices"][0]["message"]["content"]
+                answer = re.sub(r"\s+", " ", answer)
+            elif model_str == "gpt-4.1-mini":
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}]
+                response = openai.ChatCompletion.create(
+                        model="gpt-4.1-mini",
                         messages=messages,
                         temperature=0.05,
                         max_tokens=200,

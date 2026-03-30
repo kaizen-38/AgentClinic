@@ -1,0 +1,250 @@
+{
+  "overall": {
+    "total": 1789,
+    "correct": 583,
+    "accuracy_pct": 32.6,
+    "by_error_category": {
+      "no_diagnosis": 545,
+      "correct": 583,
+      "incorrect_other": 222,
+      "low_yield_testing": 16,
+      "over_testing": 23,
+      "anchor_bias": 46,
+      "knowledge_gap": 57,
+      "wrong_differential": 297
+    }
+  },
+  "by_run": {
+    "baseline_gpt4omini/medqa": {
+      "total": 107,
+      "correct": 20,
+      "accuracy_pct": 18.7,
+      "by_error_category": {
+        "no_diagnosis": 74,
+        "correct": 20,
+        "incorrect_other": 13
+      }
+    },
+    "qwen72b": {
+      "total": 107,
+      "correct": 56,
+      "accuracy_pct": 52.3,
+      "by_error_category": {
+        "correct": 56,
+        "incorrect_other": 42,
+        "no_diagnosis": 2,
+        "low_yield_testing": 3,
+        "over_testing": 4
+      }
+    },
+    "qwen72b/medqa": {
+      "total": 107,
+      "correct": 56,
+      "accuracy_pct": 52.3,
+      "by_error_category": {
+        "correct": 56,
+        "incorrect_other": 42,
+        "no_diagnosis": 2,
+        "low_yield_testing": 3,
+        "over_testing": 4
+      }
+    },
+    "qwen72b/medqa_ext": {
+      "total": 108,
+      "correct": 64,
+      "accuracy_pct": 59.3,
+      "by_error_category": {
+        "correct": 64,
+        "incorrect_other": 40,
+        "no_diagnosis": 1,
+        "low_yield_testing": 1,
+        "anchor_bias": 1,
+        "over_testing": 1
+      }
+    },
+    "qwen72b/nejm_ext": {
+      "total": 56,
+      "correct": 11,
+      "accuracy_pct": 19.6,
+      "by_error_category": {
+        "correct": 11,
+        "knowledge_gap": 39,
+        "anchor_bias": 1,
+        "no_diagnosis": 2,
+        "low_yield_testing": 3
+      }
+    },
+    "sdrp_gpt4omini/medqa": {
+      "total": 107,
+      "correct": 28,
+      "accuracy_pct": 26.2,
+      "by_error_category": {
+        "correct": 28,
+        "wrong_differential": 62,
+        "no_diagnosis": 1,
+        "incorrect_other": 16
+      }
+    },
+    "sdrp_voyager": {
+      "total": 109,
+      "correct": 42,
+      "accuracy_pct": 38.5,
+      "by_error_category": {
+        "correct": 42,
+        "wrong_differential": 39,
+        "no_diagnosis": 15,
+        "incorrect_other": 13
+      }
+    },
+    "sdrp_voyager/medqa": {
+      "total": 107,
+      "correct": 41,
+      "accuracy_pct": 38.3,
+      "by_error_category": {
+        "correct": 41,
+        "wrong_differential": 39,
+        "incorrect_other": 13,
+        "no_diagnosis": 14
+      }
+    },
+    "sdrp_voyager/medqa_ext": {
+      "total": 214,
+      "correct": 80,
+      "accuracy_pct": 37.4,
+      "by_error_category": {
+        "correct": 80,
+        "wrong_differential": 96,
+        "incorrect_other": 23,
+        "no_diagnosis": 15
+      }
+    },
+    "sdrp_voyager/nejm_ext": {
+      "total": 120,
+      "correct": 54,
+      "accuracy_pct": 45.0,
+      "by_error_category": {
+        "wrong_differential": 46,
+        "correct": 54,
+        "no_diagnosis": 20
+      }
+    },
+    "sdrp_voyager_235b/medqa": {
+      "total": 107,
+      "correct": 6,
+      "accuracy_pct": 5.6,
+      "by_error_category": {
+        "no_diagnosis": 92,
+        "wrong_differential": 4,
+        "correct": 6,
+        "incorrect_other": 5
+      }
+    },
+    "sdrp_voyager_235b/medqa_ext": {
+      "total": 214,
+      "correct": 5,
+      "accuracy_pct": 2.3,
+      "by_error_category": {
+        "no_diagnosis": 201,
+        "correct": 5,
+        "wrong_differential": 4,
+        "incorrect_other": 4
+      }
+    },
+    "sdrp_voyager_235b/nejm_ext": {
+      "total": 120,
+      "correct": 7,
+      "accuracy_pct": 5.8,
+      "by_error_category": {
+        "no_diagnosis": 106,
+        "correct": 7,
+        "wrong_differential": 7
+      }
+    },
+    "voyager/medqa": {
+      "total": 73,
+      "correct": 47,
+      "accuracy_pct": 64.4,
+      "by_error_category": {
+        "correct": 47,
+        "low_yield_testing": 3,
+        "over_testing": 4,
+        "anchor_bias": 12,
+        "incorrect_other": 7
+      }
+    },
+    "voyager/medqa_ext": {
+      "total": 68,
+      "correct": 49,
+      "accuracy_pct": 72.1,
+      "by_error_category": {
+        "correct": 49,
+        "incorrect_other": 4,
+        "anchor_bias": 13,
+        "over_testing": 2
+      }
+    },
+    "voyager/nejm_ext": {
+      "total": 65,
+      "correct": 17,
+      "accuracy_pct": 26.2,
+      "by_error_category": {
+        "correct": 17,
+        "over_testing": 8,
+        "anchor_bias": 19,
+        "knowledge_gap": 18,
+        "low_yield_testing": 3
+      }
+    }
+  },
+  "by_dataset": {
+    "MedQA": {
+      "total": 822,
+      "correct": 295,
+      "accuracy_pct": 35.9,
+      "by_error_category": {
+        "no_diagnosis": 200,
+        "correct": 295,
+        "incorrect_other": 151,
+        "low_yield_testing": 9,
+        "over_testing": 12,
+        "wrong_differential": 143,
+        "anchor_bias": 12
+      }
+    },
+    "MedQA_Ext": {
+      "total": 605,
+      "correct": 199,
+      "accuracy_pct": 32.9,
+      "by_error_category": {
+        "correct": 199,
+        "incorrect_other": 71,
+        "no_diagnosis": 217,
+        "low_yield_testing": 1,
+        "anchor_bias": 14,
+        "over_testing": 3,
+        "wrong_differential": 100
+      }
+    },
+    "NEJM_Ext": {
+      "total": 362,
+      "correct": 89,
+      "accuracy_pct": 24.6,
+      "by_error_category": {
+        "correct": 89,
+        "knowledge_gap": 57,
+        "anchor_bias": 20,
+        "no_diagnosis": 128,
+        "low_yield_testing": 6,
+        "wrong_differential": 54,
+        "over_testing": 8
+      }
+    }
+  },
+  "secondary_flag_counts": {
+    "never_requested_test": 742,
+    "late_correct_mention": 38,
+    "early_fixation": 4,
+    "test_repetition": 28,
+    "verifier_inconsistency": 621
+  }
+}

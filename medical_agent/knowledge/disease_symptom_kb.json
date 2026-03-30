@@ -1,0 +1,584 @@
+{
+  "diseases": {
+    "Myocardial Infarction": {
+      "symptoms": ["chest pain", "chest pressure", "diaphoresis", "dyspnea", "nausea", "vomiting", "left arm pain", "jaw pain", "back pain", "palpitations", "syncope", "anxiety"],
+      "tests": ["troponin", "ECG", "CBC", "BMP", "echocardiogram", "coronary angiography", "CK-MB", "BNP", "chest X-ray", "coagulation studies"],
+      "prevalence": "common"
+    },
+    "Heart Failure": {
+      "symptoms": ["dyspnea on exertion", "orthopnea", "paroxysmal nocturnal dyspnea", "lower extremity edema", "fatigue", "weight gain", "abdominal distension", "decreased exercise tolerance", "cough", "nocturia"],
+      "tests": ["BNP", "NT-proBNP", "echocardiogram", "chest X-ray", "CBC", "BMP", "troponin", "ECG", "thyroid function tests", "urinalysis"],
+      "prevalence": "common"
+    },
+    "Aortic Stenosis": {
+      "symptoms": ["dyspnea on exertion", "chest pain", "syncope", "exertional angina", "heart murmur", "fatigue", "decreased exercise tolerance", "palpitations"],
+      "tests": ["echocardiogram", "ECG", "chest X-ray", "cardiac catheterization", "CBC", "BMP", "transesophageal echocardiogram", "CT aorta"],
+      "prevalence": "common"
+    },
+    "Aortic Dissection": {
+      "symptoms": ["sudden severe tearing chest pain", "back pain", "pain radiating to the back", "hypertension", "pulse deficit", "syncope", "neurologic deficits", "diaphoresis", "hypotension", "aortic regurgitation murmur"],
+      "tests": ["CT angiography chest", "MRI aorta", "chest X-ray", "transesophageal echocardiogram", "ECG", "troponin", "CBC", "BMP", "coagulation studies", "type and screen"],
+      "prevalence": "uncommon"
+    },
+    "Pulmonary Embolism": {
+      "symptoms": ["dyspnea", "pleuritic chest pain", "tachycardia", "hemoptysis", "calf pain", "leg swelling", "syncope", "hypoxia", "anxiety", "low-grade fever"],
+      "tests": ["CT pulmonary angiography", "D-dimer", "V/Q scan", "ECG", "troponin", "BNP", "echocardiogram", "lower extremity Doppler ultrasound", "CBC", "BMP", "ABG"],
+      "prevalence": "common"
+    },
+    "Deep Vein Thrombosis": {
+      "symptoms": ["unilateral leg swelling", "calf pain", "leg warmth", "leg erythema", "leg tenderness", "pitting edema"],
+      "tests": ["lower extremity Doppler ultrasound", "D-dimer", "CBC", "coagulation studies", "hypercoagulability panel", "BMP"],
+      "prevalence": "common"
+    },
+    "Atrial Fibrillation": {
+      "symptoms": ["palpitations", "dyspnea", "fatigue", "chest discomfort", "dizziness", "syncope", "irregular pulse", "reduced exercise tolerance"],
+      "tests": ["ECG", "echocardiogram", "thyroid function tests", "CBC", "BMP", "Holter monitor", "troponin", "chest X-ray"],
+      "prevalence": "common"
+    },
+    "Infective Endocarditis": {
+      "symptoms": ["fever", "chills", "new or changing heart murmur", "fatigue", "night sweats", "weight loss", "janeway lesions", "osler nodes", "splinter hemorrhages", "roth spots", "splenomegaly", "embolic phenomena"],
+      "tests": ["blood cultures", "echocardiogram", "transesophageal echocardiogram", "CBC", "ESR", "CRP", "BMP", "urinalysis", "chest X-ray", "ECG"],
+      "prevalence": "uncommon"
+    },
+    "Pericarditis": {
+      "symptoms": ["sharp pleuritic chest pain", "pain relieved by sitting forward", "fever", "dyspnea", "pericardial friction rub", "fatigue", "myalgia"],
+      "tests": ["ECG", "echocardiogram", "troponin", "CBC", "ESR", "CRP", "chest X-ray", "BMP", "viral serologies", "ANA"],
+      "prevalence": "uncommon"
+    },
+    "Cardiac Tamponade": {
+      "symptoms": ["dyspnea", "chest pain", "hypotension", "jugular venous distension", "muffled heart sounds", "tachycardia", "pulsus paradoxus", "syncope", "anxiety"],
+      "tests": ["echocardiogram", "chest X-ray", "ECG", "pericardiocentesis", "CBC", "BMP", "coagulation studies"],
+      "prevalence": "uncommon"
+    },
+    "Hypertensive Emergency": {
+      "symptoms": ["severe headache", "visual changes", "chest pain", "dyspnea", "altered mental status", "nausea", "vomiting", "hematuria", "focal neurologic deficits", "papilledema"],
+      "tests": ["BMP", "CBC", "urinalysis", "ECG", "chest X-ray", "CT head", "troponin", "BNP", "fundoscopic exam", "renal function tests"],
+      "prevalence": "common"
+    },
+    "Aortic Regurgitation": {
+      "symptoms": ["dyspnea on exertion", "orthopnea", "palpitations", "chest pain", "wide pulse pressure", "bounding pulses", "diastolic murmur", "fatigue", "lower extremity edema"],
+      "tests": ["echocardiogram", "chest X-ray", "ECG", "cardiac MRI", "cardiac catheterization", "CBC", "BMP"],
+      "prevalence": "uncommon"
+    },
+    "Mitral Stenosis": {
+      "symptoms": ["dyspnea on exertion", "orthopnea", "hemoptysis", "fatigue", "palpitations", "mid-diastolic murmur", "lower extremity edema", "hoarseness"],
+      "tests": ["echocardiogram", "ECG", "chest X-ray", "transesophageal echocardiogram", "cardiac catheterization", "CBC", "BMP"],
+      "prevalence": "uncommon"
+    },
+    "Mitral Valve Prolapse": {
+      "symptoms": ["atypical chest pain", "palpitations", "anxiety", "fatigue", "mid-systolic click", "dyspnea", "dizziness"],
+      "tests": ["echocardiogram", "ECG", "Holter monitor", "chest X-ray"],
+      "prevalence": "common"
+    },
+    "Unstable Angina": {
+      "symptoms": ["chest pain at rest", "new onset chest pain", "increasing chest pain frequency", "chest pressure", "dyspnea", "diaphoresis", "nausea", "radiating arm pain"],
+      "tests": ["troponin", "ECG", "CBC", "BMP", "coronary angiography", "stress test", "echocardiogram", "chest X-ray"],
+      "prevalence": "common"
+    },
+    "Community-Acquired Pneumonia": {
+      "symptoms": ["fever", "cough", "productive sputum", "dyspnea", "pleuritic chest pain", "chills", "fatigue", "tachypnea", "decreased breath sounds", "crackles"],
+      "tests": ["chest X-ray", "CBC", "BMP", "sputum culture", "blood cultures", "pneumococcal urinary antigen", "legionella urinary antigen", "procalcitonin", "CRP", "pulse oximetry"],
+      "prevalence": "common"
+    },
+    "COPD": {
+      "symptoms": ["dyspnea on exertion", "chronic cough", "sputum production", "wheezing", "decreased exercise tolerance", "barrel chest", "pursed lip breathing", "use of accessory muscles", "cyanosis"],
+      "tests": ["spirometry", "chest X-ray", "CT chest", "ABG", "CBC", "BMP", "pulse oximetry", "alpha-1 antitrypsin level", "sputum culture"],
+      "prevalence": "common"
+    },
+    "Asthma": {
+      "symptoms": ["episodic wheezing", "dyspnea", "chest tightness", "cough", "nocturnal symptoms", "symptoms triggered by allergens or exercise", "tachypnea"],
+      "tests": ["spirometry", "bronchodilator reversibility testing", "methacholine challenge test", "peak flow measurement", "CBC", "IgE levels", "allergy testing", "chest X-ray"],
+      "prevalence": "common"
+    },
+    "Pneumothorax": {
+      "symptoms": ["sudden pleuritic chest pain", "dyspnea", "tachycardia", "decreased breath sounds", "hypoxia", "anxiety", "tachypnea"],
+      "tests": ["chest X-ray", "CT chest", "ABG", "pulse oximetry"],
+      "prevalence": "uncommon"
+    },
+    "Pleural Effusion": {
+      "symptoms": ["dyspnea", "pleuritic chest pain", "cough", "decreased breath sounds", "dullness to percussion", "reduced tactile fremitus"],
+      "tests": ["chest X-ray", "CT chest", "thoracentesis with pleural fluid analysis", "pleural fluid LDH", "pleural fluid protein", "pleural fluid glucose", "echocardiogram", "CBC", "BMP"],
+      "prevalence": "common"
+    },
+    "Lung Cancer": {
+      "symptoms": ["persistent cough", "hemoptysis", "dyspnea", "chest pain", "weight loss", "fatigue", "hoarseness", "dysphagia", "superior vena cava syndrome", "bone pain", "headache"],
+      "tests": ["CT chest", "PET scan", "bronchoscopy with biopsy", "CT-guided biopsy", "sputum cytology", "CBC", "BMP", "liver function tests", "pulmonary function tests", "brain MRI"],
+      "prevalence": "common"
+    },
+    "Sarcoidosis": {
+      "symptoms": ["dyspnea", "dry cough", "fatigue", "bilateral hilar lymphadenopathy", "erythema nodosum", "uveitis", "skin lesions", "fever", "weight loss", "arthralgias", "hypercalcemia symptoms"],
+      "tests": ["chest X-ray", "CT chest", "ACE level", "CBC", "BMP", "calcium", "24-hour urine calcium", "bronchoscopy with BAL and biopsy", "PET scan", "ECG", "ophthalmologic exam"],
+      "prevalence": "uncommon"
+    },
+    "Pulmonary Arterial Hypertension": {
+      "symptoms": ["dyspnea on exertion", "fatigue", "chest pain", "syncope", "lower extremity edema", "palpitations", "loud P2", "right heart failure symptoms"],
+      "tests": ["right heart catheterization", "echocardiogram", "CT pulmonary angiography", "V/Q scan", "pulmonary function tests", "BNP", "CBC", "BMP", "autoimmune panel", "6-minute walk test"],
+      "prevalence": "rare"
+    },
+    "Bronchiectasis": {
+      "symptoms": ["chronic productive cough", "copious purulent sputum", "dyspnea", "hemoptysis", "recurrent respiratory infections", "fatigue", "wheezing", "crackles"],
+      "tests": ["high-resolution CT chest", "sputum culture", "spirometry", "CBC", "immunoglobulin levels", "sweat chloride test", "bronchoscopy", "alpha-1 antitrypsin level"],
+      "prevalence": "uncommon"
+    },
+    "Tuberculosis": {
+      "symptoms": ["chronic cough", "hemoptysis", "night sweats", "weight loss", "fever", "fatigue", "pleuritic chest pain", "lymphadenopathy"],
+      "tests": ["tuberculin skin test (PPD)", "IGRA (QuantiFERON)", "chest X-ray", "sputum AFB smear", "sputum culture", "CT chest", "CBC", "BMP", "HIV test"],
+      "prevalence": "uncommon"
+    },
+    "Idiopathic Pulmonary Fibrosis": {
+      "symptoms": ["progressive dyspnea on exertion", "dry cough", "fatigue", "bibasilar crackles", "digital clubbing", "decreased exercise tolerance"],
+      "tests": ["high-resolution CT chest", "pulmonary function tests", "bronchoscopy with BAL", "surgical lung biopsy", "CBC", "BMP", "ANA", "rheumatoid factor", "echocardiogram", "6-minute walk test"],
+      "prevalence": "uncommon"
+    },
+    "COVID-19": {
+      "symptoms": ["fever", "cough", "dyspnea", "fatigue", "myalgia", "anosmia", "ageusia", "sore throat", "headache", "diarrhea", "chest pain", "hypoxia"],
+      "tests": ["SARS-CoV-2 PCR", "rapid antigen test", "CBC", "BMP", "CRP", "ferritin", "D-dimer", "LDH", "IL-6", "chest X-ray", "CT chest", "troponin"],
+      "prevalence": "common"
+    },
+    "Appendicitis": {
+      "symptoms": ["periumbilical pain migrating to right lower quadrant", "nausea", "vomiting", "fever", "anorexia", "rebound tenderness", "guarding", "rovsing sign", "psoas sign"],
+      "tests": ["CBC", "CRP", "BMP", "CT abdomen/pelvis", "ultrasound abdomen", "urinalysis", "beta-hCG (females)", "liver function tests"],
+      "prevalence": "common"
+    },
+    "Acute Pancreatitis": {
+      "symptoms": ["severe epigastric pain radiating to the back", "nausea", "vomiting", "fever", "abdominal tenderness", "distension", "cullen sign", "grey turner sign", "tachycardia"],
+      "tests": ["lipase", "amylase", "CBC", "BMP", "liver function tests", "triglycerides", "CT abdomen with contrast", "ultrasound abdomen", "calcium", "lactate"],
+      "prevalence": "common"
+    },
+    "Acute Cholecystitis": {
+      "symptoms": ["right upper quadrant pain", "fever", "nausea", "vomiting", "murphy sign", "guarding", "anorexia", "pain radiating to right shoulder"],
+      "tests": ["CBC", "liver function tests", "lipase", "ultrasound abdomen", "HIDA scan", "CT abdomen", "BMP", "blood cultures"],
+      "prevalence": "common"
+    },
+    "Crohn's Disease": {
+      "symptoms": ["abdominal pain", "diarrhea", "rectal bleeding", "weight loss", "fatigue", "fever", "perianal fistulas", "oral ulcers", "arthralgias", "skin manifestations", "nausea"],
+      "tests": ["colonoscopy with biopsy", "CT enterography", "MRI enterography", "CBC", "CRP", "ESR", "fecal calprotectin", "BMP", "vitamin B12", "folate", "albumin", "stool cultures"],
+      "prevalence": "common"
+    },
+    "Ulcerative Colitis": {
+      "symptoms": ["bloody diarrhea", "rectal urgency", "tenesmus", "abdominal cramping", "fatigue", "weight loss", "fever", "arthralgias", "uveitis", "erythema nodosum"],
+      "tests": ["colonoscopy with biopsy", "CBC", "CRP", "ESR", "fecal calprotectin", "stool cultures", "BMP", "albumin", "flexible sigmoidoscopy", "CT abdomen/pelvis"],
+      "prevalence": "common"
+    },
+    "Small Bowel Obstruction": {
+      "symptoms": ["colicky abdominal pain", "nausea", "vomiting", "abdominal distension", "obstipation", "high-pitched bowel sounds", "tympany on percussion"],
+      "tests": ["abdominal X-ray", "CT abdomen/pelvis", "CBC", "BMP", "lactate", "liver function tests", "urinalysis"],
+      "prevalence": "common"
+    },
+    "Upper GI Bleeding": {
+      "symptoms": ["hematemesis", "coffee ground emesis", "melena", "epigastric pain", "dizziness", "syncope", "tachycardia", "hypotension", "pallor", "fatigue"],
+      "tests": ["CBC", "BMP", "coagulation studies", "type and screen", "upper endoscopy", "BUN-to-creatinine ratio", "liver function tests", "H. pylori testing"],
+      "prevalence": "common"
+    },
+    "Peptic Ulcer Disease": {
+      "symptoms": ["epigastric pain", "burning epigastric pain relieved by food or antacids", "nausea", "vomiting", "bloating", "hematemesis", "melena", "weight loss"],
+      "tests": ["upper endoscopy", "H. pylori testing (urea breath test or stool antigen)", "H. pylori serology", "CBC", "fasting gastrin level", "BMP"],
+      "prevalence": "common"
+    },
+    "GERD": {
+      "symptoms": ["heartburn", "regurgitation", "dysphagia", "odynophagia", "chronic cough", "laryngitis", "hoarseness", "chest pain", "belching", "bloating"],
+      "tests": ["upper endoscopy", "ambulatory pH monitoring", "esophageal manometry", "barium swallow", "CBC"],
+      "prevalence": "common"
+    },
+    "Hepatitis B": {
+      "symptoms": ["fatigue", "nausea", "vomiting", "abdominal pain", "jaundice", "dark urine", "clay-colored stools", "arthralgias", "fever", "anorexia"],
+      "tests": ["HBsAg", "HBsAb", "HBcAb", "HBeAg", "HBV DNA", "liver function tests", "CBC", "coagulation studies", "ultrasound abdomen", "liver biopsy"],
+      "prevalence": "common"
+    },
+    "Hepatitis C": {
+      "symptoms": ["fatigue", "jaundice", "right upper quadrant pain", "nausea", "arthralgias", "myalgias", "dark urine", "anorexia", "often asymptomatic"],
+      "tests": ["HCV antibody", "HCV RNA", "HCV genotype", "liver function tests", "CBC", "coagulation studies", "liver biopsy", "FibroScan", "ultrasound abdomen"],
+      "prevalence": "common"
+    },
+    "Liver Cirrhosis": {
+      "symptoms": ["fatigue", "jaundice", "ascites", "spider angiomata", "palmar erythema", "caput medusae", "hepatic encephalopathy", "asterixis", "gynecomastia", "upper GI bleeding", "coagulopathy"],
+      "tests": ["liver function tests", "CBC", "coagulation studies", "BMP", "albumin", "ultrasound abdomen", "CT abdomen", "upper endoscopy", "liver biopsy", "MELD score", "hepatitis serologies"],
+      "prevalence": "common"
+    },
+    "Colorectal Cancer": {
+      "symptoms": ["rectal bleeding", "change in bowel habits", "abdominal pain", "weight loss", "fatigue", "iron deficiency anemia", "tenesmus", "pencil-thin stools"],
+      "tests": ["colonoscopy with biopsy", "CT chest/abdomen/pelvis", "CEA", "CBC", "BMP", "liver function tests", "fecal occult blood test", "PET scan", "MRI pelvis"],
+      "prevalence": "common"
+    },
+    "Celiac Disease": {
+      "symptoms": ["diarrhea", "steatorrhea", "abdominal pain", "bloating", "weight loss", "fatigue", "dermatitis herpetiformis", "iron deficiency anemia", "osteoporosis", "aphthous ulcers"],
+      "tests": ["anti-tissue transglutaminase IgA", "anti-endomysial antibody IgA", "total IgA", "small bowel biopsy via endoscopy", "CBC", "BMP", "iron studies", "vitamin B12", "folate", "HLA typing"],
+      "prevalence": "uncommon"
+    },
+    "Iron Deficiency Anemia": {
+      "symptoms": ["fatigue", "pallor", "dyspnea on exertion", "pica", "koilonychia", "glossitis", "angular cheilitis", "palpitations", "headache", "cold intolerance"],
+      "tests": ["CBC", "iron studies (serum iron, TIBC, ferritin)", "reticulocyte count", "peripheral blood smear", "stool occult blood", "upper and lower endoscopy"],
+      "prevalence": "common"
+    },
+    "Aplastic Anemia": {
+      "symptoms": ["fatigue", "pallor", "dyspnea", "recurrent infections", "easy bruising", "petechiae", "bleeding gums", "epistaxis", "fever"],
+      "tests": ["CBC", "peripheral blood smear", "bone marrow biopsy", "reticulocyte count", "flow cytometry", "chromosomal analysis", "PNH clone testing", "vitamin B12", "folate", "hepatitis serologies"],
+      "prevalence": "rare"
+    },
+    "Acute Myeloid Leukemia": {
+      "symptoms": ["fatigue", "pallor", "fever", "recurrent infections", "easy bruising", "petechiae", "bone pain", "splenomegaly", "gingival hyperplasia", "lymphadenopathy"],
+      "tests": ["CBC", "peripheral blood smear", "bone marrow biopsy", "flow cytometry", "cytogenetics", "molecular testing (FLT3, NPM1, IDH1/2)", "coagulation studies", "BMP", "LDH", "uric acid"],
+      "prevalence": "uncommon"
+    },
+    "Chronic Myeloid Leukemia": {
+      "symptoms": ["fatigue", "splenomegaly", "left upper quadrant pain", "weight loss", "night sweats", "fever", "easy bruising", "bone pain", "often asymptomatic"],
+      "tests": ["CBC", "peripheral blood smear", "bone marrow biopsy", "cytogenetics (Philadelphia chromosome)", "BCR-ABL PCR", "FISH", "BMP", "uric acid", "LDH"],
+      "prevalence": "uncommon"
+    },
+    "Hodgkin Lymphoma": {
+      "symptoms": ["painless lymphadenopathy", "fever", "night sweats", "weight loss", "pruritus", "alcohol-induced lymph node pain", "fatigue", "splenomegaly"],
+      "tests": ["CT chest/abdomen/pelvis", "PET scan", "lymph node biopsy", "CBC", "ESR", "LDH", "albumin", "bone marrow biopsy", "BMP"],
+      "prevalence": "uncommon"
+    },
+    "Non-Hodgkin Lymphoma": {
+      "symptoms": ["painless lymphadenopathy", "fever", "night sweats", "weight loss", "fatigue", "abdominal pain", "splenomegaly", "hepatomegaly", "extranodal involvement"],
+      "tests": ["CT chest/abdomen/pelvis", "PET scan", "lymph node biopsy", "CBC", "LDH", "beta-2 microglobulin", "bone marrow biopsy", "BMP", "flow cytometry", "immunohistochemistry"],
+      "prevalence": "uncommon"
+    },
+    "Multiple Myeloma": {
+      "symptoms": ["bone pain", "fatigue", "recurrent infections", "hypercalcemia", "renal failure symptoms", "anemia symptoms", "pathologic fractures", "back pain", "neuropathy"],
+      "tests": ["serum protein electrophoresis", "urine protein electrophoresis", "serum free light chains", "bone marrow biopsy", "skeletal survey", "CBC", "BMP", "calcium", "LDH", "beta-2 microglobulin", "PET scan"],
+      "prevalence": "uncommon"
+    },
+    "Sickle Cell Disease": {
+      "symptoms": ["vaso-occlusive pain crises", "fatigue", "pallor", "jaundice", "hand-foot syndrome", "acute chest syndrome", "splenic sequestration", "stroke", "avascular necrosis", "priapism"],
+      "tests": ["CBC", "peripheral blood smear", "hemoglobin electrophoresis", "reticulocyte count", "BMP", "LDH", "bilirubin", "type and screen", "chest X-ray", "transcranial Doppler"],
+      "prevalence": "uncommon"
+    },
+    "Immune Thrombocytopenia": {
+      "symptoms": ["petechiae", "purpura", "easy bruising", "epistaxis", "gingival bleeding", "menorrhagia", "fatigue", "often asymptomatic"],
+      "tests": ["CBC", "peripheral blood smear", "coagulation studies", "anti-platelet antibody testing", "bone marrow biopsy", "H. pylori testing", "HIV test", "hepatitis C antibody", "ANA"],
+      "prevalence": "uncommon"
+    },
+    "Thrombotic Thrombocytopenic Purpura": {
+      "symptoms": ["thrombocytopenia", "microangiopathic hemolytic anemia", "fever", "neurologic symptoms", "renal dysfunction", "purpura", "altered mental status", "fatigue", "jaundice"],
+      "tests": ["CBC", "peripheral blood smear", "ADAMTS13 activity", "ADAMTS13 inhibitor", "LDH", "haptoglobin", "BMP", "coagulation studies", "direct coombs test", "urinalysis"],
+      "prevalence": "rare"
+    },
+    "Ischemic Stroke": {
+      "symptoms": ["sudden focal neurologic deficits", "facial droop", "arm weakness", "speech difficulty", "aphasia", "dysarthria", "vision loss", "ataxia", "dizziness", "headache"],
+      "tests": ["CT head without contrast", "MRI brain with diffusion", "CT angiography head and neck", "echocardiogram", "ECG", "CBC", "coagulation studies", "BMP", "lipid panel", "HbA1c", "carotid ultrasound"],
+      "prevalence": "common"
+    },
+    "Hemorrhagic Stroke": {
+      "symptoms": ["sudden severe headache", "focal neurologic deficits", "nausea", "vomiting", "altered mental status", "hypertension", "seizures", "hemiplegia"],
+      "tests": ["CT head without contrast", "MRI brain", "CT angiography", "cerebral angiography", "CBC", "coagulation studies", "BMP", "toxicology screen"],
+      "prevalence": "uncommon"
+    },
+    "Subarachnoid Hemorrhage": {
+      "symptoms": ["thunderclap headache", "worst headache of life", "neck stiffness", "photophobia", "nausea", "vomiting", "altered mental status", "loss of consciousness", "focal neurologic deficits"],
+      "tests": ["CT head without contrast", "lumbar puncture with xanthochromia", "CT angiography", "cerebral angiography", "CBC", "coagulation studies", "BMP", "ECG", "troponin"],
+      "prevalence": "uncommon"
+    },
+    "Bacterial Meningitis": {
+      "symptoms": ["fever", "severe headache", "neck stiffness", "photophobia", "phonophobia", "altered mental status", "petechiae", "kernig sign", "brudzinski sign", "nausea", "vomiting", "seizures"],
+      "tests": ["lumbar puncture (CSF analysis)", "CSF culture", "blood cultures", "CBC", "BMP", "CT head", "CRP", "procalcitonin", "CSF PCR"],
+      "prevalence": "uncommon"
+    },
+    "Viral Encephalitis": {
+      "symptoms": ["fever", "altered mental status", "behavioral changes", "seizures", "headache", "focal neurologic deficits", "memory loss", "hallucinations", "neck stiffness"],
+      "tests": ["MRI brain", "lumbar puncture (CSF analysis)", "CSF PCR for HSV, EBV, CMV", "EEG", "CBC", "BMP", "CT head", "HIV test", "autoimmune encephalitis panel"],
+      "prevalence": "uncommon"
+    },
+    "Parkinson's Disease": {
+      "symptoms": ["resting tremor", "bradykinesia", "rigidity", "postural instability", "micrographia", "hypomimia", "shuffling gait", "freezing", "constipation", "anosmia", "REM sleep behavior disorder"],
+      "tests": ["clinical diagnosis", "MRI brain", "DaTscan", "neuropsychological testing", "smell identification testing"],
+      "prevalence": "common"
+    },
+    "Multiple Sclerosis": {
+      "symptoms": ["fatigue", "vision loss (optic neuritis)", "diplopia", "limb weakness", "sensory disturbances", "ataxia", "bladder dysfunction", "Lhermitte sign", "cognitive impairment", "heat sensitivity"],
+      "tests": ["MRI brain and spine with gadolinium", "lumbar puncture (oligoclonal bands)", "visual evoked potentials", "CBC", "BMP", "vitamin B12", "ANA", "NMO antibody", "MOG antibody"],
+      "prevalence": "uncommon"
+    },
+    "Guillain-Barre Syndrome": {
+      "symptoms": ["ascending weakness", "areflexia", "back pain", "paresthesias", "facial weakness", "dysphagia", "dysarthria", "autonomic dysfunction", "respiratory failure", "preceding infection history"],
+      "tests": ["lumbar puncture (albuminocytologic dissociation)", "nerve conduction studies", "EMG", "CBC", "BMP", "anti-ganglioside antibodies (GQ1b)", "pulmonary function tests", "campylobacter serology"],
+      "prevalence": "uncommon"
+    },
+    "Myasthenia Gravis": {
+      "symptoms": ["fatigable ptosis", "diplopia", "dysphagia", "dysarthria", "facial weakness", "proximal limb weakness", "respiratory muscle weakness", "symptoms worse with activity"],
+      "tests": ["acetylcholine receptor antibody", "anti-MuSK antibody", "repetitive nerve stimulation", "single fiber EMG", "CT chest (thymoma)", "pyridostigmine test", "CBC", "thyroid function tests"],
+      "prevalence": "uncommon"
+    },
+    "Amyotrophic Lateral Sclerosis": {
+      "symptoms": ["progressive limb weakness", "muscle atrophy", "fasciculations", "spasticity", "hyperreflexia", "dysarthria", "dysphagia", "respiratory muscle weakness", "cognitive changes"],
+      "tests": ["clinical diagnosis (El Escorial criteria)", "EMG and nerve conduction studies", "MRI brain and spine", "pulmonary function tests", "CBC", "BMP", "genetic testing (SOD1, C9orf72)", "muscle biopsy"],
+      "prevalence": "uncommon"
+    },
+    "Epilepsy": {
+      "symptoms": ["recurrent seizures", "aura", "loss of consciousness", "tonic-clonic movements", "postictal confusion", "absence episodes", "automatisms", "incontinence", "tongue biting"],
+      "tests": ["EEG", "MRI brain", "CBC", "BMP", "toxicology screen", "glucose", "sodium", "calcium", "magnesium", "antiepileptic drug levels", "prolactin level"],
+      "prevalence": "common"
+    },
+    "Bell's Palsy": {
+      "symptoms": ["acute unilateral facial weakness", "inability to close eye", "drooping of mouth", "loss of taste", "hyperacusis", "ear pain", "decreased lacrimation", "facial numbness"],
+      "tests": ["clinical diagnosis", "MRI brain with gadolinium", "CBC", "Lyme serology", "HSV serology", "blood glucose", "HbA1c", "chest X-ray"],
+      "prevalence": "common"
+    },
+    "Type 1 Diabetes Mellitus": {
+      "symptoms": ["polyuria", "polydipsia", "polyphagia", "weight loss", "fatigue", "blurred vision", "recurrent infections", "diabetic ketoacidosis"],
+      "tests": ["fasting blood glucose", "HbA1c", "C-peptide", "insulin level", "anti-GAD antibody", "islet cell antibody", "CBC", "BMP", "urinalysis", "urine microalbumin"],
+      "prevalence": "uncommon"
+    },
+    "Type 2 Diabetes Mellitus": {
+      "symptoms": ["polyuria", "polydipsia", "fatigue", "blurred vision", "recurrent infections", "slow wound healing", "acanthosis nigricans", "often asymptomatic"],
+      "tests": ["fasting blood glucose", "HbA1c", "oral glucose tolerance test", "CBC", "BMP", "lipid panel", "urine microalbumin", "creatinine", "thyroid function tests"],
+      "prevalence": "common"
+    },
+    "Diabetic Ketoacidosis": {
+      "symptoms": ["nausea", "vomiting", "abdominal pain", "polyuria", "polydipsia", "fruity breath", "kussmaul breathing", "altered mental status", "dehydration", "weakness"],
+      "tests": ["blood glucose", "arterial blood gas", "serum ketones", "beta-hydroxybutyrate", "BMP", "CBC", "urinalysis (urine ketones)", "phosphate", "ECG"],
+      "prevalence": "uncommon"
+    },
+    "Hyperosmolar Hyperglycemic State": {
+      "symptoms": ["severe hyperglycemia", "profound dehydration", "altered mental status", "focal neurologic deficits", "polyuria", "weakness", "seizures", "no significant ketosis"],
+      "tests": ["blood glucose", "serum osmolality", "BMP", "CBC", "urinalysis", "arterial blood gas", "ECG", "cultures if infection suspected"],
+      "prevalence": "uncommon"
+    },
+    "Hypothyroidism": {
+      "symptoms": ["fatigue", "weight gain", "cold intolerance", "constipation", "dry skin", "hair loss", "bradycardia", "depression", "myxedema", "menstrual irregularities", "muscle cramps"],
+      "tests": ["TSH", "free T4", "free T3", "anti-TPO antibody", "anti-thyroglobulin antibody", "CBC", "lipid panel", "BMP", "CK"],
+      "prevalence": "common"
+    },
+    "Hyperthyroidism": {
+      "symptoms": ["weight loss", "heat intolerance", "palpitations", "tremor", "anxiety", "diaphoresis", "diarrhea", "exophthalmos", "goiter", "tachycardia", "hair thinning", "menstrual irregularities"],
+      "tests": ["TSH", "free T4", "free T3", "thyroid antibodies (TSI, anti-TPO)", "thyroid ultrasound", "radioiodine uptake scan", "CBC", "liver function tests", "calcium", "ECG"],
+      "prevalence": "common"
+    },
+    "Thyroid Storm": {
+      "symptoms": ["hyperthermia", "tachycardia", "heart failure", "altered mental status", "agitation", "delirium", "vomiting", "diarrhea", "diaphoresis", "hypertension followed by shock"],
+      "tests": ["TSH", "free T4", "free T3", "CBC", "BMP", "liver function tests", "ECG", "blood cultures", "calcium"],
+      "prevalence": "rare"
+    },
+    "Cushing's Syndrome": {
+      "symptoms": ["weight gain", "central obesity", "moon facies", "buffalo hump", "hypertension", "hyperglycemia", "purple striae", "proximal muscle weakness", "easy bruising", "osteoporosis", "hirsutism"],
+      "tests": ["24-hour urine cortisol", "late night salivary cortisol", "low-dose dexamethasone suppression test", "ACTH level", "high-dose dexamethasone suppression test", "MRI pituitary", "CT adrenal", "CBC", "BMP"],
+      "prevalence": "uncommon"
+    },
+    "Addison's Disease": {
+      "symptoms": ["fatigue", "weight loss", "hyperpigmentation", "nausea", "vomiting", "abdominal pain", "hypotension", "hyponatremia", "hyperkalemia", "salt craving", "dizziness"],
+      "tests": ["morning cortisol", "ACTH stimulation test", "ACTH level", "BMP", "CBC", "ANA", "anti-adrenal antibody", "CT adrenal", "aldosterone level", "renin level"],
+      "prevalence": "rare"
+    },
+    "Pheochromocytoma": {
+      "symptoms": ["hypertensive crises", "headache", "diaphoresis", "palpitations", "anxiety", "pallor", "tremor", "weight loss", "paroxysmal hypertension", "tachycardia"],
+      "tests": ["24-hour urine catecholamines and metanephrines", "plasma free metanephrines", "CT abdomen/pelvis", "MRI abdomen", "MIBG scan", "genetic testing (SDHB, VHL, RET)", "CBC", "BMP"],
+      "prevalence": "rare"
+    },
+    "Primary Hyperaldosteronism": {
+      "symptoms": ["hypertension", "hypokalemia", "muscle weakness", "polyuria", "polydipsia", "headache", "often asymptomatic"],
+      "tests": ["aldosterone-to-renin ratio", "aldosterone level", "plasma renin activity", "CT adrenal", "adrenal vein sampling", "BMP", "24-hour urine aldosterone"],
+      "prevalence": "uncommon"
+    },
+    "Acromegaly": {
+      "symptoms": ["enlargement of hands and feet", "coarsening of facial features", "prognathism", "increased sweating", "headache", "vision changes", "arthralgia", "carpal tunnel syndrome", "sleep apnea", "hypertension"],
+      "tests": ["IGF-1", "oral glucose tolerance test with GH levels", "MRI pituitary", "echocardiogram", "colonoscopy", "thyroid function tests", "CBC", "BMP"],
+      "prevalence": "rare"
+    },
+    "Systemic Lupus Erythematosus": {
+      "symptoms": ["malar rash", "photosensitivity", "oral ulcers", "alopecia", "arthralgia", "arthritis", "serositis", "renal disease", "neuropsychiatric symptoms", "fatigue", "fever", "lymphadenopathy"],
+      "tests": ["ANA", "anti-dsDNA", "anti-Smith antibody", "complement levels (C3, C4)", "CBC", "BMP", "urinalysis", "anti-phospholipid antibodies", "ESR", "CRP", "coagulation studies"],
+      "prevalence": "uncommon"
+    },
+    "Rheumatoid Arthritis": {
+      "symptoms": ["symmetric polyarthritis", "morning stiffness greater than 1 hour", "hand and wrist involvement", "fatigue", "subcutaneous nodules", "synovial swelling", "warmth over joints", "extraarticular manifestations"],
+      "tests": ["rheumatoid factor", "anti-CCP antibody", "ESR", "CRP", "CBC", "BMP", "X-rays of hands and feet", "ANA", "liver function tests", "uric acid"],
+      "prevalence": "common"
+    },
+    "Ankylosing Spondylitis": {
+      "symptoms": ["chronic low back pain", "morning stiffness", "sacroiliac joint pain", "pain improves with exercise", "uveitis", "enthesitis", "peripheral arthritis", "fatigue", "limited spinal mobility"],
+      "tests": ["HLA-B27", "ESR", "CRP", "X-ray sacroiliac joints", "MRI sacroiliac joints", "CBC", "BMP", "ANA"],
+      "prevalence": "uncommon"
+    },
+    "Psoriatic Arthritis": {
+      "symptoms": ["asymmetric arthritis", "psoriatic skin lesions", "nail pitting", "dactylitis", "enthesitis", "sausage digits", "low back pain", "fatigue"],
+      "tests": ["ESR", "CRP", "CBC", "BMP", "rheumatoid factor", "X-rays of affected joints", "MRI", "HLA-B27", "skin biopsy"],
+      "prevalence": "uncommon"
+    },
+    "Gout": {
+      "symptoms": ["acute monoarticular arthritis", "first metatarsophalangeal joint pain", "joint swelling", "erythema", "warmth", "tenderness", "tophi", "fever", "recurrent attacks"],
+      "tests": ["uric acid", "joint aspiration with crystal analysis", "CBC", "BMP", "X-rays of affected joints", "24-hour urine uric acid", "renal function tests"],
+      "prevalence": "common"
+    },
+    "Pseudogout": {
+      "symptoms": ["acute joint pain", "swelling", "warmth", "erythema", "knee involvement most common", "wrist involvement", "fever", "resembles gout but different crystal type"],
+      "tests": ["joint aspiration with crystal analysis (calcium pyrophosphate crystals)", "X-ray (chondrocalcinosis)", "CBC", "BMP", "uric acid", "calcium", "magnesium", "phosphate", "thyroid function tests", "iron studies"],
+      "prevalence": "uncommon"
+    },
+    "Polymyalgia Rheumatica": {
+      "symptoms": ["bilateral shoulder girdle pain and stiffness", "pelvic girdle pain", "morning stiffness greater than 45 minutes", "fatigue", "low-grade fever", "weight loss", "anemia"],
+      "tests": ["ESR", "CRP", "CBC", "BMP", "liver function tests", "protein electrophoresis", "ANA", "rheumatoid factor", "anti-CCP antibody", "PET scan", "temporal artery biopsy (if GCA suspected)"],
+      "prevalence": "uncommon"
+    },
+    "Giant Cell Arteritis": {
+      "symptoms": ["headache", "scalp tenderness", "jaw claudication", "vision loss", "diplopia", "elevated ESR", "tender temporal artery", "polymyalgia rheumatica symptoms", "fever"],
+      "tests": ["ESR", "CRP", "temporal artery biopsy", "CBC", "BMP", "liver function tests", "PET scan", "CT angiography", "ophthalmologic exam"],
+      "prevalence": "uncommon"
+    },
+    "Sjogren's Syndrome": {
+      "symptoms": ["dry eyes", "dry mouth", "fatigue", "arthralgias", "parotid gland swelling", "dysphagia", "dental caries", "vaginal dryness", "peripheral neuropathy", "skin rash"],
+      "tests": ["anti-SSA (Ro) antibody", "anti-SSB (La) antibody", "ANA", "rheumatoid factor", "Schirmer test", "minor salivary gland biopsy", "CBC", "BMP", "complement levels", "protein electrophoresis"],
+      "prevalence": "uncommon"
+    },
+    "Antiphospholipid Syndrome": {
+      "symptoms": ["recurrent venous or arterial thrombosis", "recurrent pregnancy loss", "livedo reticularis", "thrombocytopenia", "stroke", "pulmonary embolism", "deep vein thrombosis"],
+      "tests": ["lupus anticoagulant", "anti-cardiolipin antibody (IgG and IgM)", "anti-beta2 glycoprotein I antibody", "CBC", "coagulation studies", "BMP", "ANA"],
+      "prevalence": "uncommon"
+    },
+    "Systemic Sclerosis": {
+      "symptoms": ["skin thickening and hardening", "raynaud phenomenon", "dysphagia", "GERD", "dyspnea", "digital ulcers", "calcinosis", "telangiectasias", "fatigue", "arthralgia"],
+      "tests": ["ANA", "anti-Scl-70 (topoisomerase I)", "anti-centromere antibody", "CBC", "BMP", "liver function tests", "urinalysis", "pulmonary function tests", "HRCT chest", "echocardiogram", "nail fold capillaroscopy"],
+      "prevalence": "rare"
+    },
+    "Dermatomyositis": {
+      "symptoms": ["proximal muscle weakness", "heliotrope rash", "gottron papules", "mechanic hands", "V-sign rash", "shawl sign", "dysphagia", "dyspnea", "fatigue", "arthralgias"],
+      "tests": ["CBC", "CK", "aldolase", "LDH", "ESR", "CRP", "ANA", "myositis-specific antibodies (anti-Jo-1, anti-MDA5)", "EMG", "MRI muscle", "muscle biopsy", "CT chest/abdomen/pelvis (malignancy screen)"],
+      "prevalence": "rare"
+    },
+    "ANCA-Associated Vasculitis": {
+      "symptoms": ["upper respiratory symptoms", "sinusitis", "epistaxis", "hemoptysis", "hematuria", "renal failure", "purpura", "mononeuritis multiplex", "fever", "weight loss", "saddle nose deformity"],
+      "tests": ["ANCA (PR3 and MPO)", "CBC", "BMP", "urinalysis", "CT chest/sinuses", "chest X-ray", "renal biopsy", "bronchoscopy", "CRP", "ESR", "complement levels"],
+      "prevalence": "rare"
+    },
+    "Behcet's Disease": {
+      "symptoms": ["recurrent oral ulcers", "genital ulcers", "uveitis", "skin lesions (erythema nodosum, pseudofolliculitis)", "arthritis", "pathergy", "CNS involvement", "vascular involvement"],
+      "tests": ["clinical diagnosis (International Study Group criteria)", "pathergy test", "HLA-B51", "CBC", "ESR", "CRP", "ophthalmologic exam", "MRI brain", "BMP"],
+      "prevalence": "rare"
+    },
+    "Acute Kidney Injury": {
+      "symptoms": ["decreased urine output", "edema", "fatigue", "nausea", "vomiting", "confusion", "shortness of breath", "fluid overload", "often asymptomatic"],
+      "tests": ["BMP", "CBC", "urinalysis", "urine microscopy", "urine sodium", "urine creatinine", "fractional excretion of sodium", "renal ultrasound", "coagulation studies", "urine protein"],
+      "prevalence": "common"
+    },
+    "Chronic Kidney Disease": {
+      "symptoms": ["fatigue", "edema", "hypertension", "nausea", "vomiting", "pruritus", "decreased urine output", "pallor", "shortness of breath", "uremic symptoms", "restless legs"],
+      "tests": ["BMP", "CBC", "urinalysis", "urine microalbumin-to-creatinine ratio", "renal ultrasound", "PTH", "phosphate", "calcium", "vitamin D", "BNP", "iron studies"],
+      "prevalence": "common"
+    },
+    "Nephrotic Syndrome": {
+      "symptoms": ["massive proteinuria", "edema", "hypoalbuminemia", "hyperlipidemia", "frothy urine", "periorbital edema", "ascites", "fatigue"],
+      "tests": ["urinalysis", "urine protein-to-creatinine ratio", "24-hour urine protein", "BMP", "albumin", "CBC", "lipid panel", "complement levels", "ANA", "anti-dsDNA", "hepatitis B and C serologies", "HIV test", "renal biopsy"],
+      "prevalence": "uncommon"
+    },
+    "Nephritic Syndrome": {
+      "symptoms": ["hematuria", "hypertension", "edema", "oliguria", "proteinuria", "red cell casts", "azotemia"],
+      "tests": ["urinalysis with microscopy", "BMP", "CBC", "complement levels (C3, C4)", "ANA", "anti-dsDNA", "ANCA", "anti-GBM antibody", "ASO titer", "renal biopsy", "chest X-ray"],
+      "prevalence": "uncommon"
+    },
+    "Renal Cell Carcinoma": {
+      "symptoms": ["hematuria", "flank pain", "palpable abdominal mass", "weight loss", "fatigue", "fever", "paraneoplastic syndromes", "varicocele (left-sided)"],
+      "tests": ["CT abdomen/pelvis with contrast", "MRI abdomen", "urinalysis", "CBC", "BMP", "LDH", "calcium", "liver function tests", "chest CT", "bone scan", "renal biopsy"],
+      "prevalence": "uncommon"
+    },
+    "Nephrolithiasis": {
+      "symptoms": ["severe flank pain radiating to groin", "hematuria", "nausea", "vomiting", "urinary urgency", "dysuria", "colicky pain"],
+      "tests": ["CT abdomen/pelvis without contrast", "urinalysis", "BMP", "CBC", "uric acid", "calcium", "phosphate", "urine culture", "stone analysis", "24-hour urine collection"],
+      "prevalence": "common"
+    },
+    "Pyelonephritis": {
+      "symptoms": ["fever", "chills", "flank pain", "costovertebral angle tenderness", "dysuria", "urinary frequency", "urgency", "nausea", "vomiting", "pyuria"],
+      "tests": ["urinalysis", "urine culture", "CBC", "BMP", "blood cultures", "CT abdomen/pelvis", "renal ultrasound"],
+      "prevalence": "common"
+    },
+    "Benign Prostatic Hyperplasia": {
+      "symptoms": ["urinary hesitancy", "weak urinary stream", "incomplete bladder emptying", "nocturia", "urinary frequency", "urgency", "straining to void", "post-void dribbling"],
+      "tests": ["PSA", "urinalysis", "BMP", "post-void residual ultrasound", "urodynamic studies", "cystoscopy", "digital rectal exam"],
+      "prevalence": "common"
+    },
+    "IgA Nephropathy": {
+      "symptoms": ["hematuria (often macroscopic with upper respiratory infections)", "proteinuria", "hypertension", "edema", "flank pain", "often asymptomatic"],
+      "tests": ["urinalysis with microscopy", "24-hour urine protein", "BMP", "CBC", "serum IgA level", "complement levels", "ANA", "ANCA", "renal biopsy with immunofluorescence"],
+      "prevalence": "uncommon"
+    },
+    "Sepsis": {
+      "symptoms": ["fever or hypothermia", "tachycardia", "tachypnea", "altered mental status", "hypotension", "signs of infection source", "decreased urine output", "mottled skin", "diaphoresis"],
+      "tests": ["blood cultures", "CBC", "BMP", "lactate", "procalcitonin", "CRP", "coagulation studies", "urinalysis and urine culture", "chest X-ray", "liver function tests"],
+      "prevalence": "common"
+    },
+    "HIV AIDS": {
+      "symptoms": ["fatigue", "weight loss", "fever", "night sweats", "lymphadenopathy", "opportunistic infections", "oral candidiasis", "recurrent infections", "diarrhea", "skin rash", "neurologic symptoms"],
+      "tests": ["HIV antibody/antigen (4th generation)", "HIV RNA viral load", "CD4 count", "CBC", "BMP", "liver function tests", "STI screening", "tuberculin skin test", "chest X-ray", "Pap smear"],
+      "prevalence": "common"
+    },
+    "Malaria": {
+      "symptoms": ["cyclical fever", "chills", "rigors", "headache", "myalgia", "nausea", "vomiting", "splenomegaly", "hepatomegaly", "jaundice", "anemia", "altered mental status (severe malaria)"],
+      "tests": ["thick and thin blood smears", "rapid diagnostic test (RDT)", "malaria PCR", "CBC", "BMP", "LDH", "glucose", "coagulation studies", "liver function tests", "blood cultures"],
+      "prevalence": "common"
+    },
+    "Dengue Fever": {
+      "symptoms": ["high fever", "severe headache", "retro-orbital pain", "myalgia", "arthralgia", "rash", "thrombocytopenia", "leukopenia", "nausea", "vomiting", "bleeding manifestations"],
+      "tests": ["dengue NS1 antigen", "dengue IgM and IgG antibody", "dengue PCR", "CBC", "BMP", "liver function tests", "coagulation studies", "hematocrit"],
+      "prevalence": "common"
+    },
+    "Lyme Disease": {
+      "symptoms": ["erythema migrans rash", "fever", "fatigue", "arthralgias", "myalgias", "headache", "facial palsy", "carditis", "Lyme arthritis", "neurologic symptoms"],
+      "tests": ["Lyme ELISA", "Western blot confirmation", "CBC", "BMP", "ESR", "CRP", "ECG", "lumbar puncture (if neurologic symptoms)", "synovial fluid analysis (if arthritis)"],
+      "prevalence": "uncommon"
+    },
+    "Cellulitis": {
+      "symptoms": ["skin erythema", "warmth", "swelling", "tenderness", "fever", "streaking erythema", "systemic symptoms in severe cases"],
+      "tests": ["CBC", "BMP", "CRP", "blood cultures", "wound cultures", "CBC", "skin punch biopsy (if atypical)"],
+      "prevalence": "common"
+    },
+    "Osteomyelitis": {
+      "symptoms": ["bone pain", "localized tenderness", "swelling", "warmth", "erythema", "fever", "limited range of motion", "fatigue", "draining sinus tract (chronic)"],
+      "tests": ["MRI bone", "bone scan", "X-ray", "CBC", "ESR", "CRP", "blood cultures", "bone biopsy", "BMP", "procalcitonin"],
+      "prevalence": "uncommon"
+    },
+    "Meningococcemia": {
+      "symptoms": ["fever", "petechiae", "purpura", "rapidly spreading rash", "headache", "neck stiffness", "hypotension", "altered mental status", "myalgia", "photophobia"],
+      "tests": ["blood cultures", "CBC", "BMP", "coagulation studies", "lumbar puncture", "CSF culture", "meningococcal PCR", "lactate", "procalcitonin"],
+      "prevalence": "rare"
+    },
+    "Wilson's Disease": {
+      "symptoms": ["hepatitis or cirrhosis symptoms", "neurologic symptoms (tremor, dysarthria, dysphagia)", "psychiatric symptoms", "Kayser-Fleischer rings", "hemolytic anemia", "renal tubular acidosis"],
+      "tests": ["serum ceruloplasmin", "24-hour urine copper", "slit-lamp exam (Kayser-Fleischer rings)", "liver biopsy with copper quantification", "CBC", "liver function tests", "BMP", "genetic testing (ATP7B)"],
+      "prevalence": "rare"
+    },
+    "Hereditary Hemochromatosis": {
+      "symptoms": ["fatigue", "arthralgias", "hepatomegaly", "skin bronzing", "diabetes mellitus", "hypogonadism", "cardiomyopathy", "cirrhosis symptoms", "often asymptomatic"],
+      "tests": ["transferrin saturation", "serum ferritin", "serum iron", "HFE gene mutation (C282Y, H63D)", "liver biopsy", "liver MRI", "CBC", "liver function tests", "glucose", "echocardiogram"],
+      "prevalence": "uncommon"
+    },
+    "Marfan Syndrome": {
+      "symptoms": ["tall stature", "long limbs", "arachnodactyly", "high arched palate", "pectus deformities", "scoliosis", "lens dislocation (ectopia lentis)", "aortic root dilatation", "aortic dissection risk", "dural ectasia", "mitral valve prolapse"],
+      "tests": ["clinical diagnosis (Ghent criteria)", "echocardiogram", "CT or MRI aorta", "ophthalmologic exam", "genetic testing (FBN1)", "echocardiogram", "spine MRI"],
+      "prevalence": "uncommon"
+    },
+    "Ehlers-Danlos Syndrome": {
+      "symptoms": ["joint hypermobility", "skin hyperextensibility", "easy bruising", "skin fragility", "poor wound healing", "chronic pain", "joint dislocations", "vascular complications (vascular type)"],
+      "tests": ["clinical diagnosis", "genetic testing (COL5A1, COL5A2, COL3A1 depending on type)", "skin biopsy", "echocardiogram (vascular type)", "CBC", "coagulation studies"],
+      "prevalence": "uncommon"
+    },
+    "Systemic Amyloidosis": {
+      "symptoms": ["fatigue", "weight loss", "edema", "periorbital purpura", "macroglossia", "carpal tunnel syndrome", "neuropathy", "nephrotic syndrome", "cardiomyopathy", "hepatomegaly", "orthostatic hypotension"],
+      "tests": ["serum protein electrophoresis", "urine protein electrophoresis", "serum free light chains", "abdominal fat pad biopsy", "bone marrow biopsy", "rectal biopsy", "echocardiogram", "cardiac MRI", "CBC", "BMP", "BNP", "troponin", "genetic testing (transthyretin)"],
+      "prevalence": "rare"
+    },
+    "Huntington's Disease": {
+      "symptoms": ["chorea", "cognitive decline", "personality changes", "psychiatric symptoms (depression, irritability)", "dysarthria", "dysphagia", "gait instability", "weight loss", "sleep disturbances"],
+      "tests": ["genetic testing (HTT gene CAG repeat expansion)", "MRI brain (caudate atrophy)", "neuropsychological testing", "clinical diagnosis in at-risk individuals"],
+      "prevalence": "rare"
+    },
+    "Acute Intermittent Porphyria": {
+      "symptoms": ["severe abdominal pain", "nausea", "vomiting", "constipation", "tachycardia", "hypertension", "peripheral neuropathy", "psychiatric symptoms", "dark or red urine", "seizures", "hyponatremia"],
+      "tests": ["urine porphobilinogen (spot test)", "urine aminolevulinic acid", "porphyrin fractionation", "erythrocyte hydroxymethylbilane synthase activity", "genetic testing (HMBS)", "CBC", "BMP", "sodium"],
+      "prevalence": "rare"
+    },
+    "Anti-NMDA Receptor Encephalitis": {
+      "symptoms": ["psychiatric symptoms (psychosis, agitation)", "seizures", "movement disorders (orofacial dyskinesias)", "autonomic instability", "decreased consciousness", "catatonia", "insomnia", "memory deficits"],
+      "tests": ["anti-NMDA receptor antibody (CSF and serum)", "MRI brain", "EEG", "lumbar puncture (CSF analysis)", "CBC", "BMP", "CT chest/abdomen/pelvis (teratoma screening)", "pelvic ultrasound (in women)", "toxicology screen"],
+      "prevalence": "rare"
+    },
+    "Castleman Disease": {
+      "symptoms": ["lymphadenopathy", "fever", "night sweats", "fatigue", "weight loss", "hepatosplenomegaly", "edema", "skin rash", "neuropathy (POEMS syndrome)"],
+      "tests": ["lymph node biopsy", "CBC", "BMP", "ESR", "CRP", "IL-6", "protein electrophoresis", "HHV-8 serology", "HIV test", "CT chest/abdomen/pelvis", "PET scan", "bone marrow biopsy"],
+      "prevalence": "rare"
+    },
+    "Neurofibromatosis Type 1": {
+      "symptoms": ["cafe-au-lait spots", "neurofibromas", "axillary freckling", "optic glioma", "lisch nodules", "bone dysplasia", "learning disabilities", "macrocephaly", "scoliosis"],
+      "tests": ["clinical diagnosis (NIH criteria)", "genetic testing (NF1 gene)", "MRI brain and spine", "ophthalmologic exam", "CBC", "BMP", "skeletal survey", "biopsy of suspicious lesions"],
+      "prevalence": "uncommon"
+    }
+  }
+}
